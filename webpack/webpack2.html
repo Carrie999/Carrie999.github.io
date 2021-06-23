@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>浅析webpack源码之convert-argv模块（二） | 个人主页</title>
+    <meta name="description" content="一个互联网全才妹子，会设计，会前端，会后端，还会视频动效，好像并没有什么卵用。。。。。。。">
+    
+    
+    <link rel="preload" href="/blog/assets/css/styles.b8f6f876.css" as="style"><link rel="preload" href="/blog/assets/js/app.b8f6f876.js" as="script"><link rel="preload" href="/blog/assets/js/28.2175adc1.js" as="script"><link rel="prefetch" href="/blog/assets/css/1.styles.8e8fe409.css"><link rel="prefetch" href="/blog/assets/css/2.styles.a2bd3099.css"><link rel="prefetch" href="/blog/assets/js/1.8e8fe409.js"><link rel="prefetch" href="/blog/assets/js/10.619c7997.js"><link rel="prefetch" href="/blog/assets/js/11.9c3e970b.js"><link rel="prefetch" href="/blog/assets/js/12.531cd467.js"><link rel="prefetch" href="/blog/assets/js/13.7e326423.js"><link rel="prefetch" href="/blog/assets/js/14.f3b097e0.js"><link rel="prefetch" href="/blog/assets/js/15.6a2e75f0.js"><link rel="prefetch" href="/blog/assets/js/16.c206d890.js"><link rel="prefetch" href="/blog/assets/js/17.cff55b68.js"><link rel="prefetch" href="/blog/assets/js/18.cbfbf9aa.js"><link rel="prefetch" href="/blog/assets/js/19.96969ef1.js"><link rel="prefetch" href="/blog/assets/js/2.a2bd3099.js"><link rel="prefetch" href="/blog/assets/js/20.357307bb.js"><link rel="prefetch" href="/blog/assets/js/21.69c3455f.js"><link rel="prefetch" href="/blog/assets/js/22.4efd32d6.js"><link rel="prefetch" href="/blog/assets/js/23.f297491c.js"><link rel="prefetch" href="/blog/assets/js/24.cc9b4c20.js"><link rel="prefetch" href="/blog/assets/js/25.ee8d1b0e.js"><link rel="prefetch" href="/blog/assets/js/26.762d7fbf.js"><link rel="prefetch" href="/blog/assets/js/27.3a122b7f.js"><link rel="prefetch" href="/blog/assets/js/29.ebb9d56c.js"><link rel="prefetch" href="/blog/assets/js/3.7e0f7a9a.js"><link rel="prefetch" href="/blog/assets/js/30.73a02a6b.js"><link rel="prefetch" href="/blog/assets/js/31.1eae61bd.js"><link rel="prefetch" href="/blog/assets/js/32.c07b58b2.js"><link rel="prefetch" href="/blog/assets/js/33.397eaa54.js"><link rel="prefetch" href="/blog/assets/js/34.51ce988a.js"><link rel="prefetch" href="/blog/assets/js/35.58456503.js"><link rel="prefetch" href="/blog/assets/js/36.608991b7.js"><link rel="prefetch" href="/blog/assets/js/4.66ec0ecb.js"><link rel="prefetch" href="/blog/assets/js/5.38cc5d58.js"><link rel="prefetch" href="/blog/assets/js/6.ce65520e.js"><link rel="prefetch" href="/blog/assets/js/7.705c84c4.js"><link rel="prefetch" href="/blog/assets/js/8.95f0bebe.js"><link rel="prefetch" href="/blog/assets/js/9.291ac53a.js">
+    <link rel="stylesheet" href="/blog/assets/css/1.styles.8e8fe409.css"><link rel="stylesheet" href="/blog/assets/css/2.styles.a2bd3099.css"><link rel="stylesheet" href="/blog/assets/css/styles.b8f6f876.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/blog/" class="home-link router-link-active"><!----> <span class="site-name">个人主页</span></a> <div class="links" style="max-width:nullpx;"><!----> <nav class="nav-links can-hide"><div class="nav-item"><a href="/blog/" class="nav-link">主页</a></div><div class="nav-item"><a href="/blog/home/" class="nav-link">vue源码解读</a></div><div class="nav-item"><a href="/blog/webpack/" class="nav-link router-link-active">webpack源码解读</a></div><div class="nav-item"><a href="/blog/node/" class="nav-link">koa源码解析</a></div><div class="nav-item"><a href="/blog/base/" class="nav-link">JS基础</a></div><div class="nav-item"><a href="/blog/source/" class="nav-link">其他</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">博文</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog/interview/" class="nav-link">面试题</a></li><li class="dropdown-item"><!----> <a href="/blog/essay/" class="nav-link">随想</a></li><li class="dropdown-item"><!----> <a href="https://saintgirl.zcool.com.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  设计
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div><div class="nav-item"><a href="https://github.com/Carrie999" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/blog/" class="nav-link">主页</a></div><div class="nav-item"><a href="/blog/home/" class="nav-link">vue源码解读</a></div><div class="nav-item"><a href="/blog/webpack/" class="nav-link router-link-active">webpack源码解读</a></div><div class="nav-item"><a href="/blog/node/" class="nav-link">koa源码解析</a></div><div class="nav-item"><a href="/blog/base/" class="nav-link">JS基础</a></div><div class="nav-item"><a href="/blog/source/" class="nav-link">其他</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">博文</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog/interview/" class="nav-link">面试题</a></li><li class="dropdown-item"><!----> <a href="/blog/essay/" class="nav-link">随想</a></li><li class="dropdown-item"><!----> <a href="https://saintgirl.zcool.com.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  设计
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div><div class="nav-item"><a href="https://github.com/Carrie999" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><div class="sidebar-group first"><p class="sidebar-heading open"><span>webpack源码系列解析</span> <!----></p> <ul class="sidebar-group-items"><li><a href="/blog/webpack/" class="sidebar-link">浅析webpack源码之前言（一）</a></li><li><a href="/blog/webpack/webpack2.html" class="active sidebar-link">浅析webpack源码之convert-argv模块（二）</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/webpack/webpack2.html#总结一下" class="sidebar-link">总结一下</a></li></ul></li><li><a href="/blog/webpack/webpack3.html" class="sidebar-link">浅析webpack源码之processOptions处理Options以及入口函数（三）</a></li><li><a href="/blog/webpack/webpack4.html" class="sidebar-link">浅析webpack源码之入口函数webpack.js详解（四）</a></li><li><a href="/blog/webpack/webpack5.html" class="sidebar-link">浅析webpack源码之Tapable粗解（五）</a></li><li><a href="/blog/webpack/webpack6.html" class="sidebar-link">浅析webpack源码之NodeEnvironmentPlugin模块总览（六）</a></li><li><a href="/blog/webpack/webpack6.1.html" class="sidebar-link">浅析webpack源码之CachedInputFileSystem模块(六)(1)</a></li><li><a href="/blog/webpack/webpack7.html" class="sidebar-link">浅析webpack源码之WebpackOptionsApply 模块(七)</a></li><li><a href="/blog/webpack/webpack8.html" class="sidebar-link">浅析webpack源码之Compiler.js模块(八)</a></li><li><a href="/blog/webpack/webpack9.html" class="sidebar-link">浅析webpack源码之Compiler.js模块(八)</a></li><li><a href="/blog/webpack/webpack10.html" class="sidebar-link">浅析webpack源码之Stat.js粗解(十)</a></li></ul></div></li></ul> </div> <div class="page"> <div class="content"><h1 id="浅析webpack源码之convert-argv模块（二）"><a href="#浅析webpack源码之convert-argv模块（二）" aria-hidden="true" class="header-anchor">#</a> 浅析webpack源码之convert-argv模块（二）</h1> <p>打开webpeck-cli下的convert-argv.js文件</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// 定义options为空数组</span>
+ <span class="token keyword">const</span> options <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+ <span class="token comment">// webpack -d 检查 -d指令</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">.</span>d<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+      <span class="token comment">//...</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment">// webpack -p</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">.</span>p<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment">//...</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">.</span>output<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment">//...</span>
+  <span class="token punctuation">}</span>
+   <span class="token comment">//...</span>
+   <span class="token comment">/*如果有 --config   --config webpack.config.js   config就是webpack.config.js
+    可以这样理解 
+    &quot;dev&quot;: &quot;webpack-dev-server --inline --progress --hot --config webpack.config.js&quot;,当我们npm run dev的时候执行这段
+    package.json的内容 此时有config读取webpack.config.js的内容 当我们npm run build时 执行 &quot;webpack&quot; 此时没有config走else分支*/</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">.</span>config<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// ... 获取文件</span>
+    <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+        <span class="token comment">/*读取默认配置 ts co 等后缀类
+         defaultConfigFiles是 数组[{ path:
+	     '/Users/orion/Desktop/react-beauty-highcharts/webpack.config.js',
+		 ext: '.js'
+		 },{path:'/Users/orion/Desktop/react-beauty-highcharts/webpack.config.ts', ext: '.ts'},{},...] */</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> defaultConfigFiles<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">const</span> webpackConfig <span class="token operator">=</span> defaultConfigFiles<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>path<span class="token punctuation">;</span>
+			<span class="token comment">// 读取文件,如果有的话push推进去</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>fs<span class="token punctuation">.</span><span class="token function">existsSync</span><span class="token punctuation">(</span>webpackConfig<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				configFiles<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+					path<span class="token punctuation">:</span> webpackConfig<span class="token punctuation">,</span>
+					ext<span class="token punctuation">:</span> defaultConfigFiles<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>ext
+				<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">// 	最终结果configFiles is the Array [ { path:'/Users/orion/Desktop/react-beauty-highcharts/webpack.config.js',</span>
+				<span class="token comment">//  ext: '.js' } ]</span>
+				<span class="token keyword">break</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+		
+		<span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+</code></pre></div><p>process.cwd() 是node.js里读取文件路径的一个API</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">//configFiles长度大于0时</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>configFiles<span class="token punctuation">.</span>length <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// ...</span>
+	<span class="token keyword">const</span> <span class="token function-variable function">requireConfig</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token function">requireConfig</span><span class="token punctuation">(</span>configPath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 这是局部options不要和全局的options数组混淆</span>
+		<span class="token keyword">let</span> options <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token constant">WEBPACK_OPTIONS</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>argv<span class="token punctuation">.</span>configRegister <span class="token operator">&amp;&amp;</span> argv<span class="token punctuation">.</span>configRegister<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				module<span class="token punctuation">.</span>paths<span class="token punctuation">.</span><span class="token function">unshift</span><span class="token punctuation">(</span>
+					path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>process<span class="token punctuation">.</span><span class="token function">cwd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;node_modules&quot;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+					process<span class="token punctuation">.</span><span class="token function">cwd</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+				<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				argv<span class="token punctuation">.</span>configRegister<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>dep <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+					<span class="token function">require</span><span class="token punctuation">(</span>dep<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token keyword">return</span> <span class="token function">require</span><span class="token punctuation">(</span>configPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+				<span class="token comment">// 读取路径下的文件内容返回</span>
+				<span class="token keyword">return</span> <span class="token function">require</span><span class="token punctuation">(</span>configPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">// 预处理options，options若是数组的话，处理成对象之类的</span>
+		options <span class="token operator">=</span> <span class="token function">prepareOptions</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> argv<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">return</span> options<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">;</span>
+	configFiles<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token comment">/// interpret.extensions[.js]为null</span>
+            <span class="token comment">// 这里直接跳出</span>
+			<span class="token function">registerCompiler</span><span class="token punctuation">(</span>interpret<span class="token punctuation">.</span>extensions<span class="token punctuation">[</span>file<span class="token punctuation">.</span>ext<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token comment">// options这里是全局options空数组 </span>
+			options<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token function">requireConfig</span><span class="token punctuation">(</span>file<span class="token punctuation">.</span>path<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">// configFileLoaded 加载完毕</span>
+		configFileLoaded <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+ 	<span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+</code></pre></div><div class="language-js extra-class"><pre class="language-js"><code> <span class="token comment">// 如果没有加载完毕，调用函数传递空数组</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>configFileLoaded<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">return</span> <span class="token function">processConfiguredOptions</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>options<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token comment">// 如果只有一个，把仅有的传进去 </span>
+	<span class="token keyword">return</span> <span class="token function">processConfiguredOptions</span><span class="token punctuation">(</span>options<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 传options</span>
+	<span class="token keyword">return</span> <span class="token function">processConfiguredOptions</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>注意了，这里有一个return 也就是这个convert-argv模块的最终返回结果，函数到这里就结束了。接下来我看看一下processConfiguredOptions函数</p> <p>我们先按照npm run build分支走options.length为1,读取options[0]是webpack.config.js里的module.exports ={} 对象，饶了这大的一个圈子，那么接下来一起来看一看对你的输入配置做了怎么样的处理吧😁</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">function</span> <span class="token function">processConfiguredOptions</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 非法输出类型检测</span>
+	<span class="token keyword">const</span> webpackConfigurationValidationErrors <span class="token operator">=</span> <span class="token function">validateSchema</span><span class="token punctuation">(</span>
+		webpackConfigurationSchema<span class="token punctuation">,</span>
+		options
+	<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>webpackConfigurationValidationErrors<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">const</span> error <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WebpackOptionsValidationError</span><span class="token punctuation">(</span>
+			webpackConfigurationValidationErrors
+		<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">// 报错处理，具体什么是非法，不影响主流程先过😁</span>
+		console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>
+			error<span class="token punctuation">.</span>message<span class="token punctuation">,</span>
+			<span class="token template-string"><span class="token string">`\nReceived: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token keyword">typeof</span> options<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> : </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span>
+		<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		process<span class="token punctuation">.</span><span class="token function">exit</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// eslint-disable-line</span>
+	<span class="token punctuation">}</span>
+	
+	<span class="token comment">// 如果options是Promise😱，以后待查，按照我们的npm run build 流程走不是Promise</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> options<span class="token punctuation">.</span>then <span class="token operator">===</span> <span class="token string">&quot;function&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+		<span class="token keyword">return</span> options<span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>processConfiguredOptions<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	
+	<span class="token comment">/* process ES6 default 检测,虽说咱们的webpack.congfig.js 的内容是用的 ES6 module.exports 写的，但是options是对象已经被读出来了，所以不走这个分支，
+	可是为什么要再写一遍呢？看来还是有这种情况的，继续往下读*/</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> options <span class="token operator">===</span> <span class="token string">&quot;object&quot;</span> <span class="token operator">&amp;&amp;</span> <span class="token keyword">typeof</span> options<span class="token punctuation">.</span><span class="token keyword">default</span> <span class="token operator">===</span> <span class="token string">&quot;object&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token function">processConfiguredOptions</span><span class="token punctuation">(</span>options<span class="token punctuation">.</span><span class="token keyword">default</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	
+	<span class="token comment">// filter multi-config by name,对于多配置的处理，我们先不走这个分支</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>Array<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> argv<span class="token punctuation">[</span><span class="token string">&quot;config-name&quot;</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	  <span class="token comment">//...</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>Array<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		options<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>processOptions<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+	    <span class="token comment">/* 看了这个多判断终于有没有找到家的感觉，回家的路程好艰辛,接下来我们看看processOptions函数对options做了什么
+	    それは何をしましたか？🤔 */</span>
+		<span class="token function">processOptions</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	<span class="token comment">// ... </span>
+	 <span class="token comment">// 这个return 正好对应上个return，是最终的模块返回值</span>
+	<span class="token keyword">return</span> options<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">function</span> <span class="token function">processOptions</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 基本处理函数</span>
+        <span class="token keyword">function</span> <span class="token function">ifArg</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> fn<span class="token punctuation">,</span> init<span class="token punctuation">,</span> finalize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">//... </span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">function</span> <span class="token function">ifArgPair</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> fn<span class="token punctuation">,</span> init<span class="token punctuation">,</span> finalize<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token comment">//... </span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">function</span> <span class="token function">ifBooleanArg</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> fn<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">//... </span>
+        <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>我们看到processOptions先定义了几个函数
+ifArg，ifArgPair，ifBooleanArg，loadPlugin 根据名字可以翻译
+如果是参数，如果是键值对形式参数 如果是布尔参数，如果是插件
+提起插件，是不是就想起了我们如下写的 plugins,对这个配置的处理，读源码联想大法和通过名称翻译的方法还是很重要的，自己写的时候，尽量起好懂的名称，不要用中文拼音😑</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token punctuation">{</span>
+	plugins<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token keyword">new</span> <span class="token class-name">HtmlWebpackPlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token comment">// 实例化生成html插件</span>
+      title<span class="token punctuation">:</span> <span class="token string">'title'</span><span class="token punctuation">,</span>
+      template<span class="token punctuation">:</span> <span class="token string">'./src/index.html'</span><span class="token punctuation">,</span> 
+      filename<span class="token punctuation">:</span> <span class="token string">'index.html'</span><span class="token punctuation">,</span> 
+      inlineSource<span class="token punctuation">:</span>  <span class="token string">'.(js|css))$'</span><span class="token punctuation">,</span>  
+      minify<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+          removeComments<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+          collapseWhitespace<span class="token punctuation">:</span> <span class="token boolean">true</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      chunks<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;index&quot;</span><span class="token punctuation">]</span>
+   <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>        
+    <span class="token keyword">new</span> <span class="token class-name">HtmlWebpackPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>接下来是真正的函数调用</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token function">ifArg</span><span class="token punctuation">(</span><span class="token string">&quot;mode&quot;</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	options<span class="token punctuation">.</span>mode <span class="token operator">=</span> value<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">ifArg</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> fn<span class="token punctuation">,</span> init<span class="token punctuation">,</span> finalize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> isArray <span class="token operator">=</span> Array<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">const</span> isSet <span class="token operator">=</span> <span class="token keyword">typeof</span> argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">!==</span> <span class="token string">&quot;undefined&quot;</span> <span class="token operator">&amp;&amp;</span> argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">!==</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+	<span class="token comment">// isArray为false 直接返回</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isArray <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>isSet<span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+	
+
+	init <span class="token operator">&amp;&amp;</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>isArray<span class="token punctuation">)</span> argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>fn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>isSet<span class="token punctuation">)</span> <span class="token function">fn</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	finalize <span class="token operator">&amp;&amp;</span> <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><ul><li>说一下argv目前argv是这么个对象</li> <li>webpakck -p 有- p的时候有p=true</li> <li>有 -d的时候有d=true</li> <li>'$0'是webpack的目前地址</li> <li>其他的自己悟，哈哈哈哈哈🤣 听说90后喜欢用这个表情</li></ul> <div class="language-js extra-class"><pre class="language-js"><code><span class="token punctuation">{</span> 
+    _<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    cache<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    bail<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    profile<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    color<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> getSupportLevel<span class="token punctuation">]</span><span class="token punctuation">,</span>
+    colors<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> getSupportLevel<span class="token punctuation">]</span><span class="token punctuation">,</span>
+    d<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    p<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token string">'info-verbosity'</span><span class="token punctuation">:</span> <span class="token string">'info'</span><span class="token punctuation">,</span>
+    infoVerbosity<span class="token punctuation">:</span> <span class="token string">'info'</span><span class="token punctuation">,</span>
+    <span class="token string">'$0'</span><span class="token punctuation">:</span>
+    <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/node_modules/.bin/webpack'</span><span class="token punctuation">,</span>
+    debug<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token string">'output-pathinfo'</span><span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    devtool<span class="token punctuation">:</span> <span class="token string">'eval-cheap-module-source-map'</span><span class="token punctuation">,</span>
+    mode<span class="token punctuation">:</span> <span class="token string">'development'</span><span class="token punctuation">,</span>
+    <span class="token string">'optimize-minimize'</span><span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    define<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token string">'process.env.NODE_ENV=&quot;production&quot;'</span> <span class="token punctuation">]</span> 
+<span class="token punctuation">}</span>
+</code></pre></div><p>我们接着读这个函数</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">function</span> <span class="token function">ifArg</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> fn<span class="token punctuation">,</span> init<span class="token punctuation">,</span> finalize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">//如果argv[name]是数组 </span>
+    <span class="token keyword">const</span> isArray <span class="token operator">=</span> Array<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//如果argv[name]存在</span>
+	<span class="token keyword">const</span> isSet <span class="token operator">=</span> <span class="token keyword">typeof</span> argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">!==</span> <span class="token string">&quot;undefined&quot;</span> <span class="token operator">&amp;&amp;</span> argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">!==</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+	<span class="token comment">// isArray和isSet同时为false的时候返回</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isArray <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>isSet<span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+	<span class="token comment">// 按照目前的流程走，能过来的name有define，output-pathinfo，debug，devtool，optimize-minimize</span>
+	<span class="token comment">//如果init函数存在就执行init函数,目前流程只有define有init，执行函数defineObject = {};</span>
+	init <span class="token operator">&amp;&amp;</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">//如果是数组，执行传入的fn</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>isArray<span class="token punctuation">)</span> argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>fn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>isSet<span class="token punctuation">)</span> <span class="token function">fn</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	finalize <span class="token operator">&amp;&amp;</span> <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment">//这里只有一个是数组define，我们追踪define</span>
+    <span class="token function">ifArgPair</span><span class="token punctuation">(</span>
+			<span class="token string">&quot;define&quot;</span><span class="token punctuation">,</span>
+			<span class="token keyword">function</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				<span class="token keyword">if</span> <span class="token punctuation">(</span>name <span class="token operator">===</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+					name <span class="token operator">=</span> value<span class="token punctuation">;</span>
+					value <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+				<span class="token punctuation">}</span>
+				defineObject<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">=</span> value<span class="token punctuation">;</span>
+			<span class="token punctuation">}</span><span class="token punctuation">,</span>
+			<span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				defineObject <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span><span class="token punctuation">,</span>
+			<span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				<span class="token keyword">const</span> DefinePlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;webpack&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>DefinePlugin<span class="token punctuation">;</span>
+				<span class="token function">addPlugin</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">DefinePlugin</span><span class="token punctuation">(</span>defineObject<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	
+	<span class="token keyword">function</span> <span class="token function">ifArgPair</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> fn<span class="token punctuation">,</span> init<span class="token punctuation">,</span> finalize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token function">ifArg</span><span class="token punctuation">(</span>
+			name<span class="token punctuation">,</span>
+			<span class="token keyword">function</span><span class="token punctuation">(</span>content<span class="token punctuation">,</span> idx<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				<span class="token keyword">const</span> i <span class="token operator">=</span> content<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span><span class="token string">&quot;=&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+					<span class="token keyword">return</span> <span class="token function">fn</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> content<span class="token punctuation">,</span> idx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+				    <span class="token comment">// 根据</span>
+					<span class="token keyword">return</span> <span class="token function">fn</span><span class="token punctuation">(</span>content<span class="token punctuation">.</span><span class="token function">substr</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">,</span> content<span class="token punctuation">.</span><span class="token function">substr</span><span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> idx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token punctuation">}</span>
+			<span class="token punctuation">}</span><span class="token punctuation">,</span>
+			init<span class="token punctuation">,</span>
+			finalize
+		<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+  <span class="token comment">// 接着，ifArgPair会调用ifArg对fn进行了处理</span>
+  <span class="token comment">//从fn到</span>
+  <span class="token keyword">function</span><span class="token punctuation">(</span>content<span class="token punctuation">,</span> idx<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				<span class="token keyword">const</span> i <span class="token operator">=</span> content<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span><span class="token string">&quot;=&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+					<span class="token keyword">return</span> <span class="token function">fn</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> content<span class="token punctuation">,</span> idx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+				    <span class="token comment">// 根据</span>
+					<span class="token keyword">return</span> <span class="token function">fn</span><span class="token punctuation">(</span>content<span class="token punctuation">.</span><span class="token function">substr</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">,</span> content<span class="token punctuation">.</span><span class="token function">substr</span><span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> idx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token punctuation">}</span>
+			<span class="token punctuation">}</span>
+ 
+	<span class="token comment">// 目前define是数组,define =[ 'process.env.NODE_ENV=&quot;production&quot;' ]</span>
+	 <span class="token keyword">if</span> <span class="token punctuation">(</span>isArray<span class="token punctuation">)</span> argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>fn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	 <span class="token comment">// 执行fn 的参数把 等号分割，执行</span>
+	 <span class="token keyword">function</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		  <span class="token comment">// name = process.env.NODE_ENV</span>
+		  <span class="token comment">// value = production</span>
+		
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>name <span class="token operator">===</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				name <span class="token operator">=</span> value<span class="token punctuation">;</span>
+				value <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+			defineObject<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">=</span> value<span class="token punctuation">;</span>
+			
+		<span class="token punctuation">}</span>
+	<span class="token comment">// 函数执行结果就是</span>
+	 defineObject<span class="token punctuation">.</span>process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">NODE_ENV</span> <span class="token operator">=</span>  production
+
+    <span class="token comment">// 最后返回的是options，此后还有执行第三个参数出入了defineObject最终影响了options配置		</span>
+</code></pre></div><p>我们接着往下读</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// 如果不为数组，而且存在执行fn</span>
+<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>isSet<span class="token punctuation">)</span> <span class="token function">fn</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>我们追踪output-pathinfo</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token function">ifBooleanArg</span><span class="token punctuation">(</span><span class="token string">&quot;output-pathinfo&quot;</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token function">ensureObject</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> <span class="token string">&quot;output&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	options<span class="token punctuation">.</span>output<span class="token punctuation">.</span>pathinfo <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">ifBooleanArg</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> fn<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token function">ifArg</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>bool<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>bool<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			   <span class="token comment">// 如果配置是true那么执行函数</span>
+				<span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token comment">// 函数执行结果就是</span>
+options<span class="token punctuation">.</span>output<span class="token punctuation">.</span>pathinfo <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+</code></pre></div><p>再往下读</p> <div class="language-js extra-class"><pre class="language-js"><code>finalize <span class="token operator">&amp;&amp;</span> <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//对于define字段传入了finalize函数，即第三个函数</span>
+<span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 从webpack引入DefinePlugin对象</span>
+	<span class="token keyword">const</span> DefinePlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;webpack&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>DefinePlugin<span class="token punctuation">;</span>
+	<span class="token comment">// 调用addPlugin</span>
+	<span class="token function">addPlugin</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">DefinePlugin</span><span class="token punctuation">(</span>defineObject<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">addPlugin</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> plugin<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token function">ensureArray</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> <span class="token string">&quot;plugins&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		options<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span><span class="token function">unshift</span><span class="token punctuation">(</span>plugin<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// 最终结果对options做了处理</span>
+</code></pre></div><p>其他同理
+😵这个模块终于写完了，我们</p> <h2 id="总结一下"><a href="#总结一下" aria-hidden="true" class="header-anchor">#</a> 总结一下</h2> <p>这个模块做的就是从webpack配置文件读取配置赋值给options，然后根据配置，对options做了附加的对象处理比如options.output.pathinfo = true;然后返回options，国外小哥哥好能绕
+我们在bin/cli文件里打印一下最后的config</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token punctuation">{</span> entry<span class="token punctuation">:</span> <span class="token string">'./src/index.js'</span><span class="token punctuation">,</span>
+  output<span class="token punctuation">:</span>
+   <span class="token punctuation">{</span> filename<span class="token punctuation">:</span> <span class="token string">'index.js'</span><span class="token punctuation">,</span>
+     path<span class="token punctuation">:</span> <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/dist'</span><span class="token punctuation">,</span>
+     libraryTarget<span class="token punctuation">:</span> <span class="token string">'commonjs2'</span><span class="token punctuation">,</span>
+     pathinfo<span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  module<span class="token punctuation">:</span> <span class="token punctuation">{</span> rules<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span> <span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  devServer<span class="token punctuation">:</span> <span class="token punctuation">{</span> openPage<span class="token punctuation">:</span> <span class="token string">'./src/index.html'</span><span class="token punctuation">,</span> open<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> hot<span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  externals<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  mode<span class="token punctuation">:</span> <span class="token string">'development'</span><span class="token punctuation">,</span>
+  plugins<span class="token punctuation">:</span>
+   <span class="token punctuation">[</span> LoaderOptionsPlugin <span class="token punctuation">{</span> options<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     LoaderOptionsPlugin <span class="token punctuation">{</span> options<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     DefinePlugin <span class="token punctuation">{</span> definitions<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span> <span class="token punctuation">}</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  devtool<span class="token punctuation">:</span> <span class="token string">'eval-cheap-module-source-map'</span><span class="token punctuation">,</span>
+  context<span class="token punctuation">:</span> <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts'</span> <span class="token punctuation">}</span>
+</code></pre></div><p>鼓掌👏给自己一朵小红花🌹</p></div> <div class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">1/21/2019, 12:26:28 PM</span></div></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/blog/webpack/" class="prev router-link-active">
+          浅析webpack源码之前言（一）
+        </a></span> <span class="next"><a href="/blog/webpack/webpack3.html">
+          浅析webpack源码之processOptions处理Options以及入口函数（三）
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/blog/assets/js/28.2175adc1.js" defer></script><script src="/blog/assets/js/app.b8f6f876.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>浅析webpack源码之Stat.js粗解(十) | 个人主页</title>
+    <meta name="description" content="一个互联网全才妹子，会设计，会前端，会后端，还会视频动效，好像并没有什么卵用。。。。。。。">
+    
+    
+    <link rel="preload" href="/blog/assets/css/styles.b8f6f876.css" as="style"><link rel="preload" href="/blog/assets/js/app.b8f6f876.js" as="script"><link rel="preload" href="/blog/assets/js/27.3a122b7f.js" as="script"><link rel="prefetch" href="/blog/assets/css/1.styles.8e8fe409.css"><link rel="prefetch" href="/blog/assets/css/2.styles.a2bd3099.css"><link rel="prefetch" href="/blog/assets/js/1.8e8fe409.js"><link rel="prefetch" href="/blog/assets/js/10.619c7997.js"><link rel="prefetch" href="/blog/assets/js/11.9c3e970b.js"><link rel="prefetch" href="/blog/assets/js/12.531cd467.js"><link rel="prefetch" href="/blog/assets/js/13.7e326423.js"><link rel="prefetch" href="/blog/assets/js/14.f3b097e0.js"><link rel="prefetch" href="/blog/assets/js/15.6a2e75f0.js"><link rel="prefetch" href="/blog/assets/js/16.c206d890.js"><link rel="prefetch" href="/blog/assets/js/17.cff55b68.js"><link rel="prefetch" href="/blog/assets/js/18.cbfbf9aa.js"><link rel="prefetch" href="/blog/assets/js/19.96969ef1.js"><link rel="prefetch" href="/blog/assets/js/2.a2bd3099.js"><link rel="prefetch" href="/blog/assets/js/20.357307bb.js"><link rel="prefetch" href="/blog/assets/js/21.69c3455f.js"><link rel="prefetch" href="/blog/assets/js/22.4efd32d6.js"><link rel="prefetch" href="/blog/assets/js/23.f297491c.js"><link rel="prefetch" href="/blog/assets/js/24.cc9b4c20.js"><link rel="prefetch" href="/blog/assets/js/25.ee8d1b0e.js"><link rel="prefetch" href="/blog/assets/js/26.762d7fbf.js"><link rel="prefetch" href="/blog/assets/js/28.2175adc1.js"><link rel="prefetch" href="/blog/assets/js/29.ebb9d56c.js"><link rel="prefetch" href="/blog/assets/js/3.7e0f7a9a.js"><link rel="prefetch" href="/blog/assets/js/30.73a02a6b.js"><link rel="prefetch" href="/blog/assets/js/31.1eae61bd.js"><link rel="prefetch" href="/blog/assets/js/32.c07b58b2.js"><link rel="prefetch" href="/blog/assets/js/33.397eaa54.js"><link rel="prefetch" href="/blog/assets/js/34.51ce988a.js"><link rel="prefetch" href="/blog/assets/js/35.58456503.js"><link rel="prefetch" href="/blog/assets/js/36.608991b7.js"><link rel="prefetch" href="/blog/assets/js/4.66ec0ecb.js"><link rel="prefetch" href="/blog/assets/js/5.38cc5d58.js"><link rel="prefetch" href="/blog/assets/js/6.ce65520e.js"><link rel="prefetch" href="/blog/assets/js/7.705c84c4.js"><link rel="prefetch" href="/blog/assets/js/8.95f0bebe.js"><link rel="prefetch" href="/blog/assets/js/9.291ac53a.js">
+    <link rel="stylesheet" href="/blog/assets/css/1.styles.8e8fe409.css"><link rel="stylesheet" href="/blog/assets/css/2.styles.a2bd3099.css"><link rel="stylesheet" href="/blog/assets/css/styles.b8f6f876.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/blog/" class="home-link router-link-active"><!----> <span class="site-name">个人主页</span></a> <div class="links" style="max-width:nullpx;"><!----> <nav class="nav-links can-hide"><div class="nav-item"><a href="/blog/" class="nav-link">主页</a></div><div class="nav-item"><a href="/blog/home/" class="nav-link">vue源码解读</a></div><div class="nav-item"><a href="/blog/webpack/" class="nav-link router-link-active">webpack源码解读</a></div><div class="nav-item"><a href="/blog/node/" class="nav-link">koa源码解析</a></div><div class="nav-item"><a href="/blog/base/" class="nav-link">JS基础</a></div><div class="nav-item"><a href="/blog/source/" class="nav-link">其他</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">博文</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog/interview/" class="nav-link">面试题</a></li><li class="dropdown-item"><!----> <a href="/blog/essay/" class="nav-link">随想</a></li><li class="dropdown-item"><!----> <a href="https://saintgirl.zcool.com.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  设计
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div><div class="nav-item"><a href="https://github.com/Carrie999" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/blog/" class="nav-link">主页</a></div><div class="nav-item"><a href="/blog/home/" class="nav-link">vue源码解读</a></div><div class="nav-item"><a href="/blog/webpack/" class="nav-link router-link-active">webpack源码解读</a></div><div class="nav-item"><a href="/blog/node/" class="nav-link">koa源码解析</a></div><div class="nav-item"><a href="/blog/base/" class="nav-link">JS基础</a></div><div class="nav-item"><a href="/blog/source/" class="nav-link">其他</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">博文</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog/interview/" class="nav-link">面试题</a></li><li class="dropdown-item"><!----> <a href="/blog/essay/" class="nav-link">随想</a></li><li class="dropdown-item"><!----> <a href="https://saintgirl.zcool.com.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  设计
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div><div class="nav-item"><a href="https://github.com/Carrie999" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><div class="sidebar-group first"><p class="sidebar-heading open"><span>webpack源码系列解析</span> <!----></p> <ul class="sidebar-group-items"><li><a href="/blog/webpack/" class="sidebar-link">浅析webpack源码之前言（一）</a></li><li><a href="/blog/webpack/webpack2.html" class="sidebar-link">浅析webpack源码之convert-argv模块（二）</a></li><li><a href="/blog/webpack/webpack3.html" class="sidebar-link">浅析webpack源码之processOptions处理Options以及入口函数（三）</a></li><li><a href="/blog/webpack/webpack4.html" class="sidebar-link">浅析webpack源码之入口函数webpack.js详解（四）</a></li><li><a href="/blog/webpack/webpack5.html" class="sidebar-link">浅析webpack源码之Tapable粗解（五）</a></li><li><a href="/blog/webpack/webpack6.html" class="sidebar-link">浅析webpack源码之NodeEnvironmentPlugin模块总览（六）</a></li><li><a href="/blog/webpack/webpack6.1.html" class="sidebar-link">浅析webpack源码之CachedInputFileSystem模块(六)(1)</a></li><li><a href="/blog/webpack/webpack7.html" class="sidebar-link">浅析webpack源码之WebpackOptionsApply 模块(七)</a></li><li><a href="/blog/webpack/webpack8.html" class="sidebar-link">浅析webpack源码之Compiler.js模块(八)</a></li><li><a href="/blog/webpack/webpack9.html" class="sidebar-link">浅析webpack源码之Compiler.js模块(八)</a></li><li><a href="/blog/webpack/webpack10.html" class="active sidebar-link">浅析webpack源码之Stat.js粗解(十)</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/webpack/webpack10.html#stats-js" class="sidebar-link">Stats.js</a></li><li class="sidebar-sub-header"><a href="/blog/webpack/webpack10.html#jsontostring函数" class="sidebar-link">jsonToString函数</a></li><li class="sidebar-sub-header"><a href="/blog/webpack/webpack10.html#tojson函数" class="sidebar-link">toJson函数</a></li></ul></li></ul></div></li></ul> </div> <div class="page"> <div class="content"><h1 id="浅析webpack源码之stat-js粗解-十"><a href="#浅析webpack源码之stat-js粗解-十" aria-hidden="true" class="header-anchor">#</a> 浅析webpack源码之Stat.js粗解(十)</h1> <p>从compilation出来
+接着我们看</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> stats <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Stats</span><span class="token punctuation">(</span>compilation<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="stats-js"><a href="#stats-js" aria-hidden="true" class="header-anchor">#</a> Stats.js</h2> <p>log大法，打印一下 stats</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">let</span> Stats <span class="token operator">=</span> <span class="token punctuation">{</span>
+  compilation<span class="token punctuation">:</span><span class="token punctuation">{</span>
+     _pluginCompat<span class="token punctuation">:</span>
+      SyncBailHook <span class="token punctuation">{</span>
+        _args<span class="token punctuation">:</span> <span class="token punctuation">[</span>Array<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        taps<span class="token punctuation">:</span> <span class="token punctuation">[</span>Array<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        interceptors<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        call<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> lazyCompileHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        promise<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> lazyCompileHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        callAsync<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> lazyCompileHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _x<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     hooks<span class="token punctuation">:</span>
+      <span class="token punctuation">{</span> buildModule<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        rebuildModule<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        failedModule<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        succeedModule<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        addEntry<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        failedEntry<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        succeedEntry<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        dependencyReference<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncWaterfallHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        finishModules<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        finishRebuildingModule<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        unseal<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        seal<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        beforeChunks<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterChunks<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeDependenciesBasic<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeDependencies<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeDependenciesAdvanced<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterOptimizeDependencies<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimize<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeModulesBasic<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeModules<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeModulesAdvanced<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterOptimizeModules<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeChunksBasic<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeChunks<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeChunksAdvanced<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterOptimizeChunks<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeTree<span class="token punctuation">:</span> <span class="token punctuation">[</span>AsyncSeriesHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterOptimizeTree<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeChunkModulesBasic<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeChunkModules<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeChunkModulesAdvanced<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterOptimizeChunkModules<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        shouldRecord<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        reviveModules<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeModuleOrder<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        advancedOptimizeModuleOrder<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        beforeModuleIds<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        moduleIds<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeModuleIds<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterOptimizeModuleIds<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        reviveChunks<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeChunkOrder<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        beforeChunkIds<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeChunkIds<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterOptimizeChunkIds<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        recordModules<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        recordChunks<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        beforeHash<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        contentHash<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterHash<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        recordHash<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        record<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        beforeModuleAssets<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        shouldGenerateChunkAssets<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        beforeChunkAssets<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        additionalChunkAssets<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        additionalAssets<span class="token punctuation">:</span> <span class="token punctuation">[</span>AsyncSeriesHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeChunkAssets<span class="token punctuation">:</span> <span class="token punctuation">[</span>AsyncSeriesHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterOptimizeChunkAssets<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeAssets<span class="token punctuation">:</span> <span class="token punctuation">[</span>AsyncSeriesHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterOptimizeAssets<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        needAdditionalSeal<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterSeal<span class="token punctuation">:</span> <span class="token punctuation">[</span>AsyncSeriesHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        chunkHash<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        moduleAsset<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        chunkAsset<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        assetPath<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncWaterfallHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        needAdditionalPass<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        childCompiler<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        normalModuleLoader<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeExtractedChunksBasic<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeExtractedChunks<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        optimizeExtractedChunksAdvanced<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        afterOptimizeExtractedChunks<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncHook<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     name<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+     compiler<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        _pluginCompat<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        hooks<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        name<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        parentCompilation<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        outputPath<span class="token punctuation">:</span> <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/dist'</span><span class="token punctuation">,</span>
+        outputFileSystem<span class="token punctuation">:</span> <span class="token punctuation">[</span>NodeOutputFileSystem<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        inputFileSystem<span class="token punctuation">:</span> <span class="token punctuation">[</span>CachedInputFileSystem<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        recordsInputPath<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        recordsOutputPath<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        records<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        removedFiles<span class="token punctuation">:</span> Set <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        fileTimestamps<span class="token punctuation">:</span> Map <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        contextTimestamps<span class="token punctuation">:</span> Map <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        resolverFactory<span class="token punctuation">:</span> <span class="token punctuation">[</span>ResolverFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        resolvers<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        options<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        context<span class="token punctuation">:</span> <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts'</span><span class="token punctuation">,</span>
+        requestShortener<span class="token punctuation">:</span> <span class="token punctuation">[</span>RequestShortener<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        running<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        watchMode<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        watchFileSystem<span class="token punctuation">:</span> <span class="token punctuation">[</span>NodeWatchFileSystem<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        dependencies<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        _lastCompilationFileDependencies<span class="token punctuation">:</span> <span class="token punctuation">[</span>SortableSet<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _lastCompilationContextDependencies<span class="token punctuation">:</span> <span class="token punctuation">[</span>SortableSet<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     resolverFactory<span class="token punctuation">:</span>
+      ResolverFactory <span class="token punctuation">{</span>
+        _pluginCompat<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        hooks<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        cache1<span class="token punctuation">:</span> <span class="token punctuation">[</span>WeakMap<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        cache2<span class="token punctuation">:</span> <span class="token punctuation">[</span>Map<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     inputFileSystem<span class="token punctuation">:</span>
+      CachedInputFileSystem <span class="token punctuation">{</span>
+        fileSystem<span class="token punctuation">:</span> NodeJsInputFileSystem <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        _statStorage<span class="token punctuation">:</span> <span class="token punctuation">[</span>Storage<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readdirStorage<span class="token punctuation">:</span> <span class="token punctuation">[</span>Storage<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readFileStorage<span class="token punctuation">:</span> <span class="token punctuation">[</span>Storage<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readJsonStorage<span class="token punctuation">:</span> <span class="token punctuation">[</span>Storage<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readlinkStorage<span class="token punctuation">:</span> <span class="token punctuation">[</span>Storage<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _stat<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> bound bound <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _statSync<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> bound bound <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readdir<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> bound readdir<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readdirSync<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> bound readdirSync<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readFile<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> bound bound readFile<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readFileSync<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> bound bound readFileSync<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readJson<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readJsonSync<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readlink<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> bound bound readlink<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _readlinkSync<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> bound bound readlinkSync<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     requestShortener<span class="token punctuation">:</span>
+      RequestShortener <span class="token punctuation">{</span>
+        currentDirectoryRegExp<span class="token punctuation">:</span> <span class="token regex">/(^|!)\/Users\/orion\/Desktop\/react\-beauty\-highcharts/g</span><span class="token punctuation">,</span>
+        parentDirectoryRegExp<span class="token punctuation">:</span> <span class="token regex">/(^|!)\/Users\/orion\/Desktop/g</span><span class="token punctuation">,</span>
+        buildinsAsModule<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        buildinsRegExp<span class="token punctuation">:</span>
+         <span class="token regex">/(^|!)\/Users\/orion\/Desktop\/react\-beauty\-highcharts\/node_modules\/webpack/g</span><span class="token punctuation">,</span>
+        cache<span class="token punctuation">:</span> <span class="token punctuation">[</span>Map<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     options<span class="token punctuation">:</span>
+      <span class="token punctuation">{</span> entry<span class="token punctuation">:</span> <span class="token string">'./src/index.js'</span><span class="token punctuation">,</span>
+        output<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        module<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        devServer<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        externals<span class="token punctuation">:</span> <span class="token punctuation">[</span>Array<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        mode<span class="token punctuation">:</span> <span class="token string">'development'</span><span class="token punctuation">,</span>
+        plugins<span class="token punctuation">:</span> <span class="token punctuation">[</span>Array<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        devtool<span class="token punctuation">:</span> <span class="token string">'eval-cheap-module-source-map'</span><span class="token punctuation">,</span>
+        context<span class="token punctuation">:</span> <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts'</span><span class="token punctuation">,</span>
+        cache<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        target<span class="token punctuation">:</span> <span class="token string">'web'</span><span class="token punctuation">,</span>
+        node<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        performance<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        optimization<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        resolve<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        resolveLoader<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     outputOptions<span class="token punctuation">:</span>
+      <span class="token punctuation">{</span> filename<span class="token punctuation">:</span> <span class="token string">'index.js'</span><span class="token punctuation">,</span>
+        path<span class="token punctuation">:</span> <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/dist'</span><span class="token punctuation">,</span>
+        libraryTarget<span class="token punctuation">:</span> <span class="token string">'commonjs2'</span><span class="token punctuation">,</span>
+        pathinfo<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        chunkFilename<span class="token punctuation">:</span> <span class="token string">'[id].index.js'</span><span class="token punctuation">,</span>
+        webassemblyModuleFilename<span class="token punctuation">:</span> <span class="token string">'[modulehash].module.wasm'</span><span class="token punctuation">,</span>
+        library<span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+        hotUpdateFunction<span class="token punctuation">:</span> <span class="token string">'webpackHotUpdate'</span><span class="token punctuation">,</span>
+        jsonpFunction<span class="token punctuation">:</span> <span class="token string">'webpackJsonp'</span><span class="token punctuation">,</span>
+        chunkCallbackName<span class="token punctuation">:</span> <span class="token string">'webpackChunk'</span><span class="token punctuation">,</span>
+        globalObject<span class="token punctuation">:</span> <span class="token string">'window'</span><span class="token punctuation">,</span>
+        devtoolNamespace<span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+        sourceMapFilename<span class="token punctuation">:</span> <span class="token string">'[file].map[query]'</span><span class="token punctuation">,</span>
+        hotUpdateChunkFilename<span class="token punctuation">:</span> <span class="token string">'[id].[hash].hot-update.js'</span><span class="token punctuation">,</span>
+        hotUpdateMainFilename<span class="token punctuation">:</span> <span class="token string">'[hash].hot-update.json'</span><span class="token punctuation">,</span>
+        crossOriginLoading<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        jsonpScriptType<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        chunkLoadTimeout<span class="token punctuation">:</span> <span class="token number">120000</span><span class="token punctuation">,</span>
+        hashFunction<span class="token punctuation">:</span> <span class="token string">'md4'</span><span class="token punctuation">,</span>
+        hashDigest<span class="token punctuation">:</span> <span class="token string">'hex'</span><span class="token punctuation">,</span>
+        hashDigestLength<span class="token punctuation">:</span> <span class="token number">20</span><span class="token punctuation">,</span>
+        devtoolLineToLine<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        strictModuleExceptionHandling<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     bail<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+     profile<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+     performance<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+     mainTemplate<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        _pluginCompat<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        outputOptions<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        hooks<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        requireFn<span class="token punctuation">:</span> <span class="token string">'__webpack_require__'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     chunkTemplate<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        _pluginCompat<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        outputOptions<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        hooks<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     hotUpdateChunkTemplate<span class="token punctuation">:</span><span class="token punctuation">{</span>
+        _pluginCompat<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        outputOptions<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        hooks<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     runtimeTemplate<span class="token punctuation">:</span><span class="token punctuation">{</span>
+        outputOptions<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        requestShortener<span class="token punctuation">:</span> <span class="token punctuation">[</span>RequestShortener<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     moduleTemplates<span class="token punctuation">:</span>
+      <span class="token punctuation">{</span> javascript<span class="token punctuation">:</span> <span class="token punctuation">[</span>ModuleTemplate<span class="token punctuation">]</span><span class="token punctuation">,</span> webassembly<span class="token punctuation">:</span> <span class="token punctuation">[</span>ModuleTemplate<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     semaphore<span class="token punctuation">:</span><span class="token punctuation">{</span>
+        available<span class="token punctuation">:</span> <span class="token number">100</span><span class="token punctuation">,</span>
+        waiters<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        _continue<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> bound _continue<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     entries<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span>NormalModule<span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+     _preparedEntrypoints<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+     entrypoints<span class="token punctuation">:</span> Map <span class="token punctuation">{</span> <span class="token string">'main'</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>Entrypoint<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     chunks<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span>Chunk<span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+     chunkGroups<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span>Entrypoint<span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+     namedChunkGroups<span class="token punctuation">:</span> Map <span class="token punctuation">{</span> <span class="token string">'main'</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>Entrypoint<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     namedChunks<span class="token punctuation">:</span> Map <span class="token punctuation">{</span> <span class="token string">'main'</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>Chunk<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     modules<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span>NormalModule<span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+     _modules<span class="token punctuation">:</span><span class="token punctuation">{</span>
+        <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/node_modules/babel-loader/lib/index.js!/Users/orion/Desktop/react-beauty-highcharts/src/index.js'</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModule<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     cache<span class="token punctuation">:</span>
+      <span class="token punctuation">{</span> <span class="token string">'m/Users/orion/Desktop/react-beauty-highcharts/node_modules/babel-loader/lib/index.js!/Users/orion/Desktop/react-beauty-highcharts/src/index.js'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>NormalModule<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        chunkmain<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     records<span class="token punctuation">:</span> <span class="token punctuation">{</span> modules<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span> chunks<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     additionalChunkAssets<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+     assets<span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token string">'index.js'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>CachedSource<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     errors<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+     warnings<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+     children<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+     dependencyFactories<span class="token punctuation">:</span><span class="token punctuation">{</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> WebAssemblyImportDependency<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> WebAssemblyExportImportedDependency<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> SingleEntryDependency<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>ContextModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>ContextModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>ContextModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> LoaderDependency<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullFactory <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>ContextModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> ContextElementDependency<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>NormalModuleFactory<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span>ContextModuleFactory<span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     dependencyTemplates<span class="token punctuation">:</span><span class="token punctuation">{</span>
+        <span class="token string">'hash'</span> <span class="token operator">=&gt;</span> <span class="token string">''</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ConstDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> HarmonyExportDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> HarmonyInitDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> HarmonyImportSideEffectDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> HarmonyImportSpecifierDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> HarmonyExportDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> HarmonyExportDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> HarmonyExportSpecifierDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> HarmonyExportImportedSpecifierDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> HarmonyAcceptDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> HarmonyAcceptImportDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> AMDRequireDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ModuleDependencyTemplateAsRequireId <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> AMDRequireArrayDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ContextDependencyTemplateAsRequireCall <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> AMDDefineDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> UnsupportedDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> LocalModuleDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ModuleDependencyTemplateAsId <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ContextDependencyTemplateAsRequireCall <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ModuleDependencyTemplateAsId <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ContextDependencyTemplateAsId <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> RequireResolveHeaderDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> RequireHeaderDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> RequireIncludeDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> NullDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> RequireEnsureDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ModuleDependencyTemplateAsRequireId <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ImportDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ImportEagerDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ImportDependencyTemplate <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>Function<span class="token punctuation">]</span> <span class="token operator">=&gt;</span> ContextDependencyTemplateAsRequireCall <span class="token punctuation">{</span><span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     childrenCounters<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     usedChunkIds<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+     usedModuleIds<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+     fileTimestamps<span class="token punctuation">:</span> Map <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     contextTimestamps<span class="token punctuation">:</span> Map <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     compilationDependencies<span class="token punctuation">:</span> Set <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     _buildingModules<span class="token punctuation">:</span> Map <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     _rebuildingModules<span class="token punctuation">:</span> Map <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+     fullHash<span class="token punctuation">:</span> <span class="token string">'41d7d3a4c3eeb4a7fe6a4dcb5b927f6b'</span><span class="token punctuation">,</span>
+     hash<span class="token punctuation">:</span> <span class="token string">'41d7d3a4c3eeb4a7fe6a'</span><span class="token punctuation">,</span>
+     fileDependencies<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/.babelrc'</span><span class="token punctuation">,</span>
+        <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/src/index.js'</span><span class="token punctuation">,</span>
+        _sortFn<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        _lastActiveSortFn<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        _cache<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        _cacheOrderIndependent<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     contextDependencies<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        _sortFn<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        _lastActiveSortFn<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+        _cache<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        _cacheOrderIndependent<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     missingDependencies<span class="token punctuation">:</span><span class="token punctuation">{</span>
+        _sortFn<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        _lastActiveSortFn<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+        _cache<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+        _cacheOrderIndependent<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  hash<span class="token punctuation">:</span> <span class="token string">'41d7d3a4c3eeb4a7fe6a'</span><span class="token punctuation">,</span>
+  startTime<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+  endTime<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span>
+</code></pre></div><p>感觉之前所以的对象都放在了一个合集里，给人而全的感觉</p> <p>里面主要含有一个对象
+inputFileSyste，options，输出的outputOptions，dependencyFactories等
+给每次打包一个hash值，代表唯一性</p> <p>天啊😱我竟然恍然大悟，发现了惊天大秘密</p> <h2 id="jsontostring函数"><a href="#jsontostring函数" aria-hidden="true" class="header-anchor">#</a> jsonToString函数</h2> <p>打印</p> <div class="language- extra-class"><pre class="language-text"><code>'Hash: \u001b[1m41d7d3a4c3eeb4a7fe6a\u001b[39m\u001b[22m\n
+Version: webpack \u001b[1m4.28.2\u001b[39m\u001b[22m\n
+Time: \u001b[1m500\u001b[39m\u001b[22mms\n
+Built at: 2019-01-19 \u001b[1m16:48:03\u001b[39m\u001b[22m\n   \u001b[1mAsset\u001b[39m\u001b[22m      \u001b[1mSize\u001b[39m\u001b[22m  \u001b[1mChunks\u001b[39m\u001b[22m  \u001b[1m\u001b[39m\u001b[22m           \u001b[1m\u001b[39m\u001b[22m\u001b[1mChunk Names\u001b[39m\u001b[22m\n\u001b[1m\u001b[32mindex.js\u001b[39m\u001b[22m  27.3 KiB    \u001b[1mmain\u001b[39m\u001b[22m  \u001b[1m\u001b[32m[emitted]\u001b[39m\u001b[22m  main\n
+Entrypoint \u001b[1mmain\u001b[39m\u001b[22m = \u001b[1m\u001b[32mindex.js\u001b[39m\u001b[22m\n
+[\u001b[1m./src/index.js\u001b[39m\u001b[22m] 7.42 KiB {\u001b[1m\u001b[33mmain\u001b[39m\u001b[22m}\u001b[1m\u001b[32m [built]\u001b[39m\u001b[22m'
+</code></pre></div><p>这不是就是平常我们 npm run build 的输出吗
+在终端上显示的页面</p> <div class="language- extra-class"><pre class="language-text"><code>Hash: 41d7d3a4c3eeb4a7fe6a
+Version: webpack 4.28.2
+Time: 500ms
+Built at: 2019-01-19 16:48:03
+   Asset      Size  Chunks             Chunk Names
+index.js  27.3 KiB    main  [emitted]  main
+Entrypoint main = index.js
+[./src/index.js] 7.42 KiB {main} [built]
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>// obj输出的对象，useColors颜色配置
+static jsonToString(obj, useColors){
+    // ...    
+}
+</code></pre></div><p>这个静态方法所做的事情就就是传入JSON对象和配置，返回字符串</p> <h2 id="tojson函数"><a href="#tojson函数" aria-hidden="true" class="header-anchor">#</a> toJson函数</h2> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">/* options = { context: '/Users/orion/Desktop/react-beauty-highcharts',
+  colors: { level: 3, hasBasic: true, has256: true, has16m: true },
+  cached: false,
+  cachedAssets: false,
+  exclude: [ 'node_modules', 'bower_components', 'components' ],
+  infoVerbosity: 'info' }
+  forToString = true*/</span>
+<span class="token function">toJson</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> forToString<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// ...</span>
+    
+    <span class="token comment">/*{ errors: [],
+  warnings: [],
+  version: '4.28.2',
+  hash: '41d7d3a4c3eeb4a7fe6a',
+  time: 623,
+  builtAt: 1547888599671,
+  assetsByChunkName: { main: 'index.js' },
+  assets:
+   [ { name: 'index.js',
+       size: 27997,
+       chunks: [Array],
+       chunkNames: [Array],
+       emitted: true,
+       isOverSizeLimit: undefined } ],
+  filteredAssets: 0,
+  entrypoints:
+   { main:
+      { chunks: [Array],
+        assets: [Array],
+        children: {},
+        childAssets: {},
+        isOverSizeLimit: undefined } },
+  modules:
+   [ { id: './src/index.js',
+       identifier:
+        '/Users/orion/Desktop/react-beauty-highcharts/node_modules/babel-loader/lib/index.js!/Users/orion/Desktop/react-beauty-highcharts/src/index.js',
+       name: './src/index.js',
+       index: 0,
+       index2: 0,
+       size: 7597,
+       cacheable: true,
+       built: true,
+       optional: false,
+       prefetched: false,
+       chunks: [Array],
+       issuer: null,
+       issuerId: null,
+       issuerName: null,
+       issuerPath: null,
+       profile: undefined,
+       failed: false,
+       errors: 0,
+       warnings: 0 } ],
+  filteredModules: 0,
+  children: [] }*/</span>
+    retrun obj
+<span class="token punctuation">}</span>
+</code></pre></div><p>不言而喻，toJson函数主要做的是输出一些打包后的文件信息，大小，时间，hash，路径等</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">//toJson后返回的对象传给jsonToString</span>
+<span class="token keyword">const</span> obj <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">toJson</span><span class="token punctuation">(</span>options<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">return</span> Stats<span class="token punctuation">.</span><span class="token function">jsonToString</span><span class="token punctuation">(</span>obj<span class="token punctuation">,</span> useColors<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>Stat.js模块功能更多是辅助功能，就像它的名字一样，状态展示</p> <p>选了一个Baker-Miller pink，用ps简单勾画，目前的学习进度
+<img src="https://wx4.sinaimg.cn/mw690/bfc0264aly1fzc1be2tksj20tu0k0dhw.jpgo" alt="1.png">
+基本核心全在chunk压缩生成文件处理这里，想要深入，还需细细的研究🤔</p></div> <div class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">1/21/2019, 12:26:28 PM</span></div></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/blog/webpack/webpack9.html" class="prev">
+          浅析webpack源码之Compiler.js模块(八)
+        </a></span> <!----></p></div> </div> <!----></div></div>
+    <script src="/blog/assets/js/27.3a122b7f.js" defer></script><script src="/blog/assets/js/app.b8f6f876.js" defer></script>
+  </body>
+</html>

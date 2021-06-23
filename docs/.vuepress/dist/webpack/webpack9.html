@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>浅析webpack源码之Compiler.js模块(八) | 个人主页</title>
+    <meta name="description" content="一个互联网全才妹子，会设计，会前端，会后端，还会视频动效，好像并没有什么卵用。。。。。。。">
+    
+    
+    <link rel="preload" href="/blog/assets/css/styles.b8f6f876.css" as="style"><link rel="preload" href="/blog/assets/js/app.b8f6f876.js" as="script"><link rel="preload" href="/blog/assets/js/36.608991b7.js" as="script"><link rel="prefetch" href="/blog/assets/css/1.styles.8e8fe409.css"><link rel="prefetch" href="/blog/assets/css/2.styles.a2bd3099.css"><link rel="prefetch" href="/blog/assets/js/1.8e8fe409.js"><link rel="prefetch" href="/blog/assets/js/10.619c7997.js"><link rel="prefetch" href="/blog/assets/js/11.9c3e970b.js"><link rel="prefetch" href="/blog/assets/js/12.531cd467.js"><link rel="prefetch" href="/blog/assets/js/13.7e326423.js"><link rel="prefetch" href="/blog/assets/js/14.f3b097e0.js"><link rel="prefetch" href="/blog/assets/js/15.6a2e75f0.js"><link rel="prefetch" href="/blog/assets/js/16.c206d890.js"><link rel="prefetch" href="/blog/assets/js/17.cff55b68.js"><link rel="prefetch" href="/blog/assets/js/18.cbfbf9aa.js"><link rel="prefetch" href="/blog/assets/js/19.96969ef1.js"><link rel="prefetch" href="/blog/assets/js/2.a2bd3099.js"><link rel="prefetch" href="/blog/assets/js/20.357307bb.js"><link rel="prefetch" href="/blog/assets/js/21.69c3455f.js"><link rel="prefetch" href="/blog/assets/js/22.4efd32d6.js"><link rel="prefetch" href="/blog/assets/js/23.f297491c.js"><link rel="prefetch" href="/blog/assets/js/24.cc9b4c20.js"><link rel="prefetch" href="/blog/assets/js/25.ee8d1b0e.js"><link rel="prefetch" href="/blog/assets/js/26.762d7fbf.js"><link rel="prefetch" href="/blog/assets/js/27.3a122b7f.js"><link rel="prefetch" href="/blog/assets/js/28.2175adc1.js"><link rel="prefetch" href="/blog/assets/js/29.ebb9d56c.js"><link rel="prefetch" href="/blog/assets/js/3.7e0f7a9a.js"><link rel="prefetch" href="/blog/assets/js/30.73a02a6b.js"><link rel="prefetch" href="/blog/assets/js/31.1eae61bd.js"><link rel="prefetch" href="/blog/assets/js/32.c07b58b2.js"><link rel="prefetch" href="/blog/assets/js/33.397eaa54.js"><link rel="prefetch" href="/blog/assets/js/34.51ce988a.js"><link rel="prefetch" href="/blog/assets/js/35.58456503.js"><link rel="prefetch" href="/blog/assets/js/4.66ec0ecb.js"><link rel="prefetch" href="/blog/assets/js/5.38cc5d58.js"><link rel="prefetch" href="/blog/assets/js/6.ce65520e.js"><link rel="prefetch" href="/blog/assets/js/7.705c84c4.js"><link rel="prefetch" href="/blog/assets/js/8.95f0bebe.js"><link rel="prefetch" href="/blog/assets/js/9.291ac53a.js">
+    <link rel="stylesheet" href="/blog/assets/css/1.styles.8e8fe409.css"><link rel="stylesheet" href="/blog/assets/css/2.styles.a2bd3099.css"><link rel="stylesheet" href="/blog/assets/css/styles.b8f6f876.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/blog/" class="home-link router-link-active"><!----> <span class="site-name">个人主页</span></a> <div class="links" style="max-width:nullpx;"><!----> <nav class="nav-links can-hide"><div class="nav-item"><a href="/blog/" class="nav-link">主页</a></div><div class="nav-item"><a href="/blog/home/" class="nav-link">vue源码解读</a></div><div class="nav-item"><a href="/blog/webpack/" class="nav-link router-link-active">webpack源码解读</a></div><div class="nav-item"><a href="/blog/node/" class="nav-link">koa源码解析</a></div><div class="nav-item"><a href="/blog/base/" class="nav-link">JS基础</a></div><div class="nav-item"><a href="/blog/source/" class="nav-link">其他</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">博文</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog/interview/" class="nav-link">面试题</a></li><li class="dropdown-item"><!----> <a href="/blog/essay/" class="nav-link">随想</a></li><li class="dropdown-item"><!----> <a href="https://saintgirl.zcool.com.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  设计
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div><div class="nav-item"><a href="https://github.com/Carrie999" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/blog/" class="nav-link">主页</a></div><div class="nav-item"><a href="/blog/home/" class="nav-link">vue源码解读</a></div><div class="nav-item"><a href="/blog/webpack/" class="nav-link router-link-active">webpack源码解读</a></div><div class="nav-item"><a href="/blog/node/" class="nav-link">koa源码解析</a></div><div class="nav-item"><a href="/blog/base/" class="nav-link">JS基础</a></div><div class="nav-item"><a href="/blog/source/" class="nav-link">其他</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">博文</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog/interview/" class="nav-link">面试题</a></li><li class="dropdown-item"><!----> <a href="/blog/essay/" class="nav-link">随想</a></li><li class="dropdown-item"><!----> <a href="https://saintgirl.zcool.com.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  设计
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div><div class="nav-item"><a href="https://github.com/Carrie999" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><div class="sidebar-group first"><p class="sidebar-heading open"><span>webpack源码系列解析</span> <!----></p> <ul class="sidebar-group-items"><li><a href="/blog/webpack/" class="sidebar-link">浅析webpack源码之前言（一）</a></li><li><a href="/blog/webpack/webpack2.html" class="sidebar-link">浅析webpack源码之convert-argv模块（二）</a></li><li><a href="/blog/webpack/webpack3.html" class="sidebar-link">浅析webpack源码之processOptions处理Options以及入口函数（三）</a></li><li><a href="/blog/webpack/webpack4.html" class="sidebar-link">浅析webpack源码之入口函数webpack.js详解（四）</a></li><li><a href="/blog/webpack/webpack5.html" class="sidebar-link">浅析webpack源码之Tapable粗解（五）</a></li><li><a href="/blog/webpack/webpack6.html" class="sidebar-link">浅析webpack源码之NodeEnvironmentPlugin模块总览（六）</a></li><li><a href="/blog/webpack/webpack6.1.html" class="sidebar-link">浅析webpack源码之CachedInputFileSystem模块(六)(1)</a></li><li><a href="/blog/webpack/webpack7.html" class="sidebar-link">浅析webpack源码之WebpackOptionsApply 模块(七)</a></li><li><a href="/blog/webpack/webpack8.html" class="sidebar-link">浅析webpack源码之Compiler.js模块(八)</a></li><li><a href="/blog/webpack/webpack9.html" class="active sidebar-link">浅析webpack源码之Compiler.js模块(八)</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/webpack/webpack9.html#webpack术语表定义" class="sidebar-link">webpack术语表定义</a></li><li class="sidebar-sub-header"><a href="/blog/webpack/webpack9.html#总结" class="sidebar-link">总结</a></li><li class="sidebar-sub-header"><a href="/blog/webpack/webpack9.html#chunks" class="sidebar-link">chunks</a></li><li class="sidebar-sub-header"><a href="/blog/webpack/webpack9.html#modules" class="sidebar-link">modules</a></li></ul></li><li><a href="/blog/webpack/webpack10.html" class="sidebar-link">浅析webpack源码之Stat.js粗解(十)</a></li></ul></div></li></ul> </div> <div class="page"> <div class="content"><h1 id="浅析webpack源码之compiler-js模块-八"><a href="#浅析webpack源码之compiler-js模块-八" aria-hidden="true" class="header-anchor">#</a> 浅析webpack源码之Compiler.js模块(八)</h1> <p>我们先看一下 compilation是什么？
+是一个很大的对象
+打印key值</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token punctuation">[</span> <span class="token string">'_pluginCompat'</span><span class="token punctuation">,</span>
+  <span class="token string">'hooks'</span><span class="token punctuation">,</span>
+  <span class="token string">'name'</span><span class="token punctuation">,</span>
+  <span class="token string">'compiler'</span><span class="token punctuation">,</span>
+  <span class="token string">'resolverFactory'</span><span class="token punctuation">,</span>
+  <span class="token string">'inputFileSystem'</span><span class="token punctuation">,</span>
+  <span class="token string">'requestShortener'</span><span class="token punctuation">,</span>
+  <span class="token string">'options'</span><span class="token punctuation">,</span>
+  <span class="token string">'outputOptions'</span><span class="token punctuation">,</span>
+  <span class="token string">'bail'</span><span class="token punctuation">,</span>
+  <span class="token string">'profile'</span><span class="token punctuation">,</span>
+  <span class="token string">'performance'</span><span class="token punctuation">,</span>
+  <span class="token string">'mainTemplate'</span><span class="token punctuation">,</span>
+  <span class="token string">'chunkTemplate'</span><span class="token punctuation">,</span>
+  <span class="token string">'hotUpdateChunkTemplate'</span><span class="token punctuation">,</span>
+  <span class="token string">'runtimeTemplate'</span><span class="token punctuation">,</span>
+  <span class="token string">'moduleTemplates'</span><span class="token punctuation">,</span>
+  <span class="token string">'semaphore'</span><span class="token punctuation">,</span>
+  <span class="token string">'entries'</span><span class="token punctuation">,</span>
+  <span class="token string">'_preparedEntrypoints'</span><span class="token punctuation">,</span>
+  <span class="token string">'entrypoints'</span><span class="token punctuation">,</span>
+  <span class="token string">'chunks'</span><span class="token punctuation">,</span>
+  <span class="token string">'chunkGroups'</span><span class="token punctuation">,</span>
+  <span class="token string">'namedChunkGroups'</span><span class="token punctuation">,</span>
+  <span class="token string">'namedChunks'</span><span class="token punctuation">,</span>
+  <span class="token string">'modules'</span><span class="token punctuation">,</span>
+  <span class="token string">'_modules'</span><span class="token punctuation">,</span>
+  <span class="token string">'cache'</span><span class="token punctuation">,</span>
+  <span class="token string">'records'</span><span class="token punctuation">,</span>
+  <span class="token string">'additionalChunkAssets'</span><span class="token punctuation">,</span>
+  <span class="token string">'assets'</span><span class="token punctuation">,</span>
+  <span class="token string">'errors'</span><span class="token punctuation">,</span>
+  <span class="token string">'warnings'</span><span class="token punctuation">,</span>
+  <span class="token string">'children'</span><span class="token punctuation">,</span>
+  <span class="token string">'dependencyFactories'</span><span class="token punctuation">,</span>
+  <span class="token string">'dependencyTemplates'</span><span class="token punctuation">,</span>
+  <span class="token string">'childrenCounters'</span><span class="token punctuation">,</span>
+  <span class="token string">'usedChunkIds'</span><span class="token punctuation">,</span>
+  <span class="token string">'usedModuleIds'</span><span class="token punctuation">,</span>
+  <span class="token string">'fileTimestamps'</span><span class="token punctuation">,</span>
+  <span class="token string">'contextTimestamps'</span><span class="token punctuation">,</span>
+  <span class="token string">'compilationDependencies'</span><span class="token punctuation">,</span>
+  <span class="token string">'_buildingModules'</span><span class="token punctuation">,</span>
+  <span class="token string">'_rebuildingModules'</span>
+</code></pre></div><p>我们看有熟悉的chunks，entries，options，
+这些是Compilation定义的属性</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> EntryModuleNotFoundError <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./EntryModuleNotFoundError&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> ModuleNotFoundError <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./ModuleNotFoundError&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> ModuleDependencyWarning <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./ModuleDependencyWarning&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> ModuleDependencyError <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./ModuleDependencyError&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> ChunkGroup <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./ChunkGroup&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> Chunk <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./Chunk&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> Entrypoint <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./Entrypoint&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> MainTemplate <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./MainTemplate&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> ChunkTemplate <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./ChunkTemplate&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> HotUpdateChunkTemplate <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./HotUpdateChunkTemplate&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> ModuleTemplate <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./ModuleTemplate&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> RuntimeTemplate <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./RuntimeTemplate&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> ChunkRenderError <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./ChunkRenderError&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> AsyncDependencyToInitialChunkError <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./AsyncDependencyToInitialChunkError&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> Stats <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./Stats&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> Semaphore <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./util/Semaphore&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> createHash <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./util/createHash&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> Queue <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./util/Queue&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> SortableSet <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./util/SortableSet&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> GraphHelpers <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./GraphHelpers&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> ModuleDependency <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./dependencies/ModuleDependency&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> compareLocations <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;./compareLocations&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>从这一堆的模块引入里，也可以猜出Compilation主要做了Modules变成Chunks编译的过程</p> <p>里面有一些方法</p> <p>1.对模块的处理，创建搜索添加构建/模块依赖处理，添加模块依赖，分类模块等
+addModule/getModule/ findModule/buildModule/sortModules
+2.对Chunk的处理，创建Chunk
+3.哈希值</p> <div class="language-js extra-class"><pre class="language-js"><code>Compilation<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>applyPlugins
+</code></pre></div><p>在原型上添加了applyPlugins方法</p> <p>Compilation.js也是对Tapable 的拓展
+主要处理Chunk、Module等</p> <h2 id="webpack术语表定义"><a href="#webpack术语表定义" aria-hidden="true" class="header-anchor">#</a> webpack术语表定义</h2> <p>我们学习一下
+模块：离散的功能块，提供比完整程序更小的表面积。编写良好的模块提供了可靠的抽象和封装边界，构成了一致的设计和明确的目的。</p> <p>块：此Webpack特定术语在内部用于管理捆绑过程。捆绑包由块组成，其中有几种类型（例如入口和子）。通常，块直接与输出束相对应，但是，有些配置不会产生一对一的关系。</p> <p>Bundle：由许多不同的模块生成，bundle包含已经过加载和编译过程的源文件的最终版本。</p> <p>总结
+a chunk is a group of modules within the webpack process, a bundle is an emitted chunk or set of chunks.</p> <p>一个块是webpack进程中的一组模块，一个bundle是一个发出的块或一组块。</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token punctuation">{</span>
+  entry<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    foo<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;webpack/hot/only-dev-server.js&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;./src/foo.js&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    bar<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;./src/bar.js&quot;</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  output<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    path<span class="token punctuation">:</span> <span class="token string">&quot;./dist&quot;</span><span class="token punctuation">,</span>
+    filename<span class="token punctuation">:</span> <span class="token string">&quot;[name].js&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+Modules<span class="token punctuation">:</span> <span class="token string">&quot;webpack/hot/only-dev-server.js&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;./src/foo.js&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;./src/bar.js&quot;</span> <span class="token punctuation">(</span> <span class="token operator">+</span> any other modules that are dependencies <span class="token keyword">of</span> these entry points<span class="token operator">!</span><span class="token punctuation">)</span>
+Chunks<span class="token punctuation">:</span> foo<span class="token punctuation">,</span> bar
+Bundles<span class="token punctuation">:</span> foo<span class="token punctuation">,</span> bar
+</code></pre></div><p>通俗的解释一下，Modules是引入的模块，Chunks就是编译的模块，Bundles是提交的Chunks ，Chunks和Bundles是1:1的关系，配置map会有例外</p> <h2 id="总结"><a href="#总结" aria-hidden="true" class="header-anchor">#</a> 总结</h2> <p>Compilation主要做了Modules变成Chunks编译的过程</p> <h2 id="chunks"><a href="#chunks" aria-hidden="true" class="header-anchor">#</a> chunks</h2> <p>不细看逻辑，好像太虚了，我们看一下this.chunks</p> <p>它是一个数组,目前Chunk的长度是1，因为只是引入了一个模块</p> <div class="language- extra-class"><pre class="language-text"><code>[ Chunk {
+    id: 'main',
+    ids: [ 'main' ],
+    debugId: 1000,
+    name: 'main',
+    preventIntegration: false,
+    entryModule:
+     NormalModule {
+       dependencies: [],
+       blocks: [],
+       variables: [],
+       type: 'javascript/auto',
+       context: '/Users/orion/Desktop/react-beauty-highcharts/src',
+       debugId: 1000,
+       hash: 'a6388d29fa15bd58c6cffb10246992a5',
+       renderedHash: 'a6388d29fa15bd58c6cf',
+       resolveOptions: {},
+       factoryMeta: {},
+       warnings: [],
+       errors: [],
+       buildMeta: [Object],
+       buildInfo: [Object],
+       reasons: [Array],
+       _chunks: [SortableSet],
+       id: './src/index.js',
+       index: 0,
+       index2: 0,
+       depth: 0,
+       issuer: null,
+       profile: undefined,
+       prefetched: false,
+       built: true,
+       used: null,
+       usedExports: null,
+       optimizationBailout: [],
+       _rewriteChunkInReasons: undefined,
+       useSourceMap: true,
+       _source: [SourceMapSource],
+       request:
+        '/Users/orion/Desktop/react-beauty-highcharts/node_modules/babel-loader/lib/index.js!/Users/orion/Desktop/react-beauty-highcharts/src/index.js',
+       userRequest: '/Users/orion/Desktop/react-beauty-highcharts/src/index.js',
+       rawRequest: './src/index.js',
+       binary: false,
+       parser: [Parser],
+       generator: JavascriptGenerator {},
+       resource: '/Users/orion/Desktop/react-beauty-highcharts/src/index.js',
+       matchResource: undefined,
+       loaders: [Array],
+       error: null,
+       _buildHash: '488efbd43aa05371d3f44d94c89abd57',
+       buildTimestamp: 1547884969828,
+       _cachedSources: Map {},
+       lineToLine: false,
+       _lastSuccessfulBuildMeta: [Object],
+       _ast: null },
+    _modules:
+     SortableSet [Set] {
+       [NormalModule],
+       _sortFn: [Function: sortByIdentifier],
+       _lastActiveSortFn: null,
+       _cache: undefined,
+       _cacheOrderIndependent: undefined },
+    filenameTemplate: undefined,
+    _groups:
+     SortableSet [Set] {
+       [Entrypoint],
+       _sortFn: [Function: sortChunkGroupById],
+       _lastActiveSortFn: null,
+       _cache: undefined,
+       _cacheOrderIndependent: undefined },
+    files: [],
+    rendered: false,
+    hash: '0988e8454f1915ec05fee482db8d0a6f',
+    contentHash: { javascript: '4b8695ca3c1d42e76c52' },
+    renderedHash: '0988e8454f1915ec05fe',
+    chunkReason: undefined,
+    extraAsync: false,
+    removedModules: undefined } ]
+</code></pre></div><p>我们看到在entryModule下，记录了入口的绝对地址，相对地址，编译的hash，文件类型等信息</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// 文件写入，文件输出，文件缓存，里面具体的template.getRenderManifest，chunk.hasRuntime()，CachedSource具体的逻辑不能够一一的去研究详解，但是从名字能知道这个函数是做什么的</span>
+<span class="token function">createChunkAssets</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">const</span> outputOptions <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>outputOptions<span class="token punctuation">;</span>
+		<span class="token keyword">const</span> cachedSourceMap <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Map</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">/** @type {Map&lt;string, {hash: string, source: Source, chunk: Chunk}&gt;} */</span>
+		<span class="token keyword">const</span> alreadyWrittenFiles <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Map</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>chunks<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">const</span> chunk <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>chunks<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+			chunk<span class="token punctuation">.</span>files <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+			<span class="token keyword">let</span> source<span class="token punctuation">;</span>
+			<span class="token keyword">let</span> file<span class="token punctuation">;</span>
+			<span class="token keyword">let</span> filenameTemplate<span class="token punctuation">;</span>
+			<span class="token keyword">try</span> <span class="token punctuation">{</span>
+				<span class="token keyword">const</span> template <span class="token operator">=</span> chunk<span class="token punctuation">.</span><span class="token function">hasRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+					<span class="token operator">?</span> <span class="token keyword">this</span><span class="token punctuation">.</span>mainTemplate
+					<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>chunkTemplate<span class="token punctuation">;</span>
+				<span class="token keyword">const</span> manifest <span class="token operator">=</span> template<span class="token punctuation">.</span><span class="token function">getRenderManifest</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+					chunk<span class="token punctuation">,</span>
+					hash<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>hash<span class="token punctuation">,</span>
+					fullHash<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>fullHash<span class="token punctuation">,</span>
+					outputOptions<span class="token punctuation">,</span>
+					moduleTemplates<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>moduleTemplates<span class="token punctuation">,</span>
+					dependencyTemplates<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>dependencyTemplates
+				<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// [{ render(), filenameTemplate, pathOptions, identifier, hash }]</span>
+				<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> fileManifest <span class="token keyword">of</span> manifest<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+					<span class="token keyword">const</span> cacheName <span class="token operator">=</span> fileManifest<span class="token punctuation">.</span>identifier<span class="token punctuation">;</span>
+					<span class="token keyword">const</span> usedHash <span class="token operator">=</span> fileManifest<span class="token punctuation">.</span>hash<span class="token punctuation">;</span>
+					filenameTemplate <span class="token operator">=</span> fileManifest<span class="token punctuation">.</span>filenameTemplate<span class="token punctuation">;</span>
+					file <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getPath</span><span class="token punctuation">(</span>filenameTemplate<span class="token punctuation">,</span> fileManifest<span class="token punctuation">.</span>pathOptions<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+					<span class="token comment">// check if the same filename was already written by another chunk</span>
+					<span class="token keyword">const</span> alreadyWritten <span class="token operator">=</span> alreadyWrittenFiles<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+					<span class="token keyword">if</span> <span class="token punctuation">(</span>alreadyWritten <span class="token operator">!==</span> undefined<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+						<span class="token keyword">if</span> <span class="token punctuation">(</span>alreadyWritten<span class="token punctuation">.</span>hash <span class="token operator">===</span> usedHash<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+							<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>cache<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+								<span class="token keyword">this</span><span class="token punctuation">.</span>cache<span class="token punctuation">[</span>cacheName<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+									hash<span class="token punctuation">:</span> usedHash<span class="token punctuation">,</span>
+									source<span class="token punctuation">:</span> alreadyWritten<span class="token punctuation">.</span>source
+								<span class="token punctuation">}</span><span class="token punctuation">;</span>
+							<span class="token punctuation">}</span>
+							chunk<span class="token punctuation">.</span>files<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+							<span class="token keyword">this</span><span class="token punctuation">.</span>hooks<span class="token punctuation">.</span>chunkAsset<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>chunk<span class="token punctuation">,</span> file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+							<span class="token keyword">continue</span><span class="token punctuation">;</span>
+						<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+							<span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span>
+								<span class="token template-string"><span class="token string">`Conflict: Multiple chunks emit assets to the same filename </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>file<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span> <span class="token operator">+</span>
+									<span class="token template-string"><span class="token string">` (chunks </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>alreadyWritten<span class="token punctuation">.</span>chunk<span class="token punctuation">.</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> and </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>chunk<span class="token punctuation">.</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">)`</span></span>
+							<span class="token punctuation">)</span><span class="token punctuation">;</span>
+						<span class="token punctuation">}</span>
+					<span class="token punctuation">}</span>
+					<span class="token keyword">if</span> <span class="token punctuation">(</span>
+						<span class="token keyword">this</span><span class="token punctuation">.</span>cache <span class="token operator">&amp;&amp;</span>
+						<span class="token keyword">this</span><span class="token punctuation">.</span>cache<span class="token punctuation">[</span>cacheName<span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span>
+						<span class="token keyword">this</span><span class="token punctuation">.</span>cache<span class="token punctuation">[</span>cacheName<span class="token punctuation">]</span><span class="token punctuation">.</span>hash <span class="token operator">===</span> usedHash
+					<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+						source <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>cache<span class="token punctuation">[</span>cacheName<span class="token punctuation">]</span><span class="token punctuation">.</span>source<span class="token punctuation">;</span>
+					<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+						source <span class="token operator">=</span> fileManifest<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+						<span class="token comment">// Ensure that source is a cached source to avoid additional cost because of repeated access</span>
+						<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span>source <span class="token keyword">instanceof</span> <span class="token class-name">CachedSource</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+							<span class="token keyword">const</span> cacheEntry <span class="token operator">=</span> cachedSourceMap<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span>source<span class="token punctuation">)</span><span class="token punctuation">;</span>
+							<span class="token keyword">if</span> <span class="token punctuation">(</span>cacheEntry<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+								source <span class="token operator">=</span> cacheEntry<span class="token punctuation">;</span>
+							<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+								<span class="token keyword">const</span> cachedSource <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CachedSource</span><span class="token punctuation">(</span>source<span class="token punctuation">)</span><span class="token punctuation">;</span>
+								cachedSourceMap<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span>source<span class="token punctuation">,</span> cachedSource<span class="token punctuation">)</span><span class="token punctuation">;</span>
+								source <span class="token operator">=</span> cachedSource<span class="token punctuation">;</span>
+							<span class="token punctuation">}</span>
+						<span class="token punctuation">}</span>
+						<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>cache<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+							<span class="token keyword">this</span><span class="token punctuation">.</span>cache<span class="token punctuation">[</span>cacheName<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+								hash<span class="token punctuation">:</span> usedHash<span class="token punctuation">,</span>
+								source
+							<span class="token punctuation">}</span><span class="token punctuation">;</span>
+						<span class="token punctuation">}</span>
+					<span class="token punctuation">}</span>
+					<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>assets<span class="token punctuation">[</span>file<span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>assets<span class="token punctuation">[</span>file<span class="token punctuation">]</span> <span class="token operator">!==</span> source<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+						<span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span>
+							<span class="token template-string"><span class="token string">`Conflict: Multiple assets emit to the same filename </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>file<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span>
+						<span class="token punctuation">)</span><span class="token punctuation">;</span>
+					<span class="token punctuation">}</span>
+					<span class="token keyword">this</span><span class="token punctuation">.</span>assets<span class="token punctuation">[</span>file<span class="token punctuation">]</span> <span class="token operator">=</span> source<span class="token punctuation">;</span>
+					chunk<span class="token punctuation">.</span>files<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+					<span class="token keyword">this</span><span class="token punctuation">.</span>hooks<span class="token punctuation">.</span>chunkAsset<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>chunk<span class="token punctuation">,</span> file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+					alreadyWrittenFiles<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span>file<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+						hash<span class="token punctuation">:</span> usedHash<span class="token punctuation">,</span>
+						source<span class="token punctuation">,</span>
+						chunk
+					<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token punctuation">}</span>
+			<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">err</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				<span class="token keyword">this</span><span class="token punctuation">.</span>errors<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>
+					<span class="token keyword">new</span> <span class="token class-name">ChunkRenderError</span><span class="token punctuation">(</span>chunk<span class="token punctuation">,</span> file <span class="token operator">||</span> filenameTemplate<span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+				<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+</code></pre></div><h2 id="modules"><a href="#modules" aria-hidden="true" class="header-anchor">#</a> modules</h2> <div class="language-js extra-class"><pre class="language-js"><code><span class="token punctuation">[</span> <span class="token punctuation">{</span>
+    dependencies<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    blocks<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    variables<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    type<span class="token punctuation">:</span> <span class="token string">'javascript/auto'</span><span class="token punctuation">,</span>
+    context<span class="token punctuation">:</span> <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/src'</span><span class="token punctuation">,</span>
+    debugId<span class="token punctuation">:</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+    hash<span class="token punctuation">:</span> <span class="token string">'a6388d29fa15bd58c6cffb10246992a5'</span><span class="token punctuation">,</span>
+    renderedHash<span class="token punctuation">:</span> <span class="token string">'a6388d29fa15bd58c6cf'</span><span class="token punctuation">,</span>
+    resolveOptions<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    factoryMeta<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    warnings<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    errors<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    buildMeta<span class="token punctuation">:</span> <span class="token punctuation">{</span> providedExports<span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    buildInfo<span class="token punctuation">:</span>
+     <span class="token punctuation">{</span> cacheable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+       fileDependencies<span class="token punctuation">:</span> <span class="token punctuation">[</span>Set<span class="token punctuation">]</span><span class="token punctuation">,</span>
+       contextDependencies<span class="token punctuation">:</span> Set <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+       temporaryProvidedExports<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    reasons<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span>ModuleReason<span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    _chunks<span class="token punctuation">:</span><span class="token punctuation">{</span>
+       <span class="token punctuation">[</span>Chunk<span class="token punctuation">]</span><span class="token punctuation">,</span>
+       _sortFn<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> sortById<span class="token punctuation">]</span><span class="token punctuation">,</span>
+       _lastActiveSortFn<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+       _cache<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+       _cacheOrderIndependent<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    id<span class="token punctuation">:</span> <span class="token string">'./src/index.js'</span><span class="token punctuation">,</span>
+    index<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    index2<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    depth<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    issuer<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    profile<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+    prefetched<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    built<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    used<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    usedExports<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    optimizationBailout<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    _rewriteChunkInReasons<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+    useSourceMap<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    _source<span class="token punctuation">:</span><span class="token punctuation">{</span>
+       _value<span class="token punctuation">:</span>
+        <span class="token string">'module.exports = {\n  doubleLine: function doubleLine(arr) {\n    if (arr &amp;&amp; !Array.isArray(arr)) {\n      console.error(\'the first params type must be Array\');\n      return;\n    }\n\n    return {\n      credits: {\n        enabled: false // 禁用版权信息\n\n      },\n      chart: {\n        width: \'400\',\n        height: \'400\',\n        type: \'area\',\n        backgroundColor: {\n          linearGradient: [0, 0, 500, 500],\n          stops: [[0, \'rgba(14, 8, 55,1)\'], [1, \'rgba(14, 8, 55,1)\']]\n        }\n      },\n      title: {\n        text: \'\',\n        style: {\n          color: \'#a6aed2\',\n          font: \'bold 16px &quot;Trebuchet MS&quot;, Verdana, sans-serif\'\n        }\n      },\n      xAxis: {\n        categories: [\'10:00\', \'10:30\', \'11:00\', \'11:30\', \'12:00\', \'12:30\', \'13:00\', \'13:30\', \'14:00\', \'14:30\', \'15:00\', \'15:30\', \'16:00\', \'16:30\', \'16:30\', \'17:00\', \'17:30\', \'18:00\', \'18:30\', \'19:00\'],\n        labels: {\n          format: \'{value} \',\n          style: {\n            color: \'#746f95\',\n            fontSize: \'12px\',\n            fontFamily: \'微软雅黑\'\n          }\n        },\n        maxPadding: 0.05,\n        showLastLabel: true,\n        // tickmarkPlacement:\'on\',\n        tickColor: \'#746f95\',\n        lineWidth: 1,\n        lineColor: \'#746f95\',\n        tickLength: 5,\n        minRange: 5,\n        tickInterval: 1 // 坐标轴刻度间隔为一星期\n\n      },\n      yAxis: {\n        gridLineWidth: \'0px\',\n        startOnTick: true,\n        endOnTick: false,\n        maxPadding: 0.35,\n        title: {\n          text: null\n        },\n        labels: {\n          // format: \'{value} m\',\n          style: {\n            color: \'#746f95\',\n            fontSize: \'12px\',\n            fontFamily: \'微软雅黑\'\n          }\n        },\n        lineWidth: 1,\n        lineColor: \'#746f95\'\n      },\n      legend: {\n        itemStyle: {\n          font: \'9pt Trebuchet MS, Verdana, sans-serif\',\n          color: \'#a6aed2\'\n        },\n        itemHoverStyle: {\n          color: \'#fff\'\n        }\n      },\n      tooltip: {\n        pointFormat: \'{series.name}:  &lt;b&gt;{point.y:,.0f}&lt;/b&gt;人\'\n      },\n      plotOptions: {\n        area: {\n          // pointStart: 1920,\n          marker: {\n            enabled: false,\n            symbol: \'circle\',\n            radius: 2,\n            states: {\n              hover: {\n                enabled: true\n              }\n            }\n          }\n        }\n      },\n      series: arr &amp;&amp; arr[0] === \'pink\' ? [{\n        // data: [  110, 235, 369, 640,\n        //        1005, 1436, 2063, 3057, 4618, 6444, 9822, 15468, 20434, 24126,\n        //        27387, 29459, 31056, 31982, 32040, 31233, 29224, 27342, 26662,\n        //        26956, 27912, 28999, 28965, 27826, 25579, 25722, 24826, 24605,\n        //        24304, 23464, 23708, 24099, 24357, 24237, 24401, 24344, 23586,\n        //        22380, 21004, 17287, 14747, 13076, 12555, 12144, 11009, 10950,\n        //        10871, 10824, 10577, 10527, 10475, 10421, 10358, 10295, 10104],\n        lineColor: \'#e88eb3\',\n        color: {\n          linearGradient: {\n            x1: 0,\n            x2: 0,\n            y1: 0,\n            y2: 1\n          },\n          stops: [[0, \'rgba(231,142,179,0.8)\'], [1, \'rgba(135,56,89,0.5)\']]\n        },\n        fillOpacity: 0.5,\n        name: \'进\',\n        marker: {\n          enabled: false\n        } // threshold: null // 是否显示负数\n\n      }, {\n        // data: ,\n        lineColor: \'#b946ff\',\n        color: {\n          linearGradient: {\n            x1: 0,\n            x2: 0,\n            y1: 0,\n            y2: 1\n          },\n          stops: [[0, \'rgba(152,60,210,0.8)\'], [1, \'rgba(65,25,90,0.35)\']]\n        },\n        fillOpacity: 0.5,\n        name: \'出\',\n        marker: {\n          enabled: false\n        },\n        threshold: null\n      }] : [{\n        // data: [  110, 235, 369, 640,\n        //        1005, 1436, 2063, 3057, 4618, 6444, 9822, 15468, 20434, 24126,\n        //        27387, 29459, 31056, 31982, 32040, 31233, 29224, 27342, 26662,\n        //        26956, 27912, 28999, 28965, 27826, 25579, 25722, 24826, 24605,\n        //        24304, 23464, 23708, 24099, 24357, 24237, 24401, 24344, 23586,\n        //        22380, 21004, 17287, 14747, 13076, 12555, 12144, 11009, 10950,\n        //        10871, 10824, 10577, 10527, 10475, 10421, 10358, 10295, 10104],\n        lineColor: \'#b946ff\',\n        color: {\n          linearGradient: {\n            x1: 0,\n            x2: 0,\n            y1: 0,\n            y2: 1\n          },\n          stops: [[0, \'rgba(152,60,210,0.8)\'], [1, \'rgba(65,25,90,0.35)\']]\n        },\n        fillOpacity: 0.5,\n        name: \'进\',\n        marker: {\n          enabled: false\n        } // threshold: null // 是否显示负数\n\n      }, {\n        // data: ,\n        lineColor: \'#68d5ee\',\n        color: {\n          linearGradient: {\n            x1: 0,\n            x2: 0,\n            y1: 0,\n            y2: 1\n          },\n          stops: [[0, \'rgba(104,213,238,0.8)\'], [1, \'rgba(7,44,96,0.5)\']]\n        },\n        fillOpacity: 0.5,\n        name: \'出\',\n        marker: {\n          enabled: false\n        },\n        threshold: null\n      }]\n    };\n  },\n  columns: function columns() {\n    return {\n      credits: {\n        enabled: false\n      },\n      chart: {\n        type: \'column\',\n        backgroundColor: {\n          linearGradient: [0, 0, 500, 500],\n          stops: [[0, \'rgb(14, 8, 55)\'], [1, \'rgb(14, 8, 55)\']]\n        }\n      },\n      title: {\n        text: \'月平均降雨量\',\n        style: {\n          color: \'#a6aed2\',\n          font: \'bold 16px &quot;Trebuchet MS&quot;, Verdana, sans-serif\'\n        }\n      },\n      xAxis: {\n        gridLineWidth: \'0px\',\n        startOnTick: true,\n        endOnTick: false,\n        maxPadding: 0.35,\n        categories: [\'一月\', \'二月\', \'三月\', \'四月\', \'五月\', \'六月\', \'七月\', \'八月\', \'九月\', \'十月\', \'十一月\', \'十二月\'],\n        labels: {\n          format: \'{value} \',\n          style: {\n            color: \'#746f95\',\n            fontSize: \'12px\',\n            fontFamily: \'微软雅黑\'\n          }\n        },\n        crosshair: true,\n        lineWidth: 1,\n        lineColor: \'#746f95\',\n        tickLength: 5,\n        tickColor: \'#746f95\'\n      },\n      yAxis: {\n        gridLineWidth: \'0px\',\n        startOnTick: true,\n        endOnTick: false,\n        maxPadding: 0.35,\n        min: 0,\n        labels: {\n          format: \'{value} \',\n          style: {\n            color: \'#746f95\',\n            fontSize: \'12px\',\n            fontFamily: \'微软雅黑\'\n          }\n        },\n        title: {\n          // 平均时长 (min)\n          text: \'\',\n          style: {\n            color: \'#746f95\',\n            fontSize: \'12px\',\n            fontFamily: \'微软雅黑\'\n          }\n        },\n        lineWidth: 1,\n        lineColor: \'#746f95\'\n      },\n      tooltip: {\n        // head + 每个 point + footer 拼接成完整的 table\n        headerFormat: \'&lt;span style=&quot;font-size:10px&quot;&gt;{point.key}&lt;/span&gt;&lt;table&gt;\',\n        pointFormat: \'&lt;tr&gt;&lt;td style=&quot;color:{series.color};padding:0&quot;&gt;{series.name}: &lt;/td&gt;\' + \'&lt;td style=&quot;padding:0&quot;&gt;&lt;b&gt;{point.y} &lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;\',\n        footerFormat: \'&lt;/table&gt;\',\n        shared: true,\n        useHTML: true\n      },\n      plotOptions: {\n        column: {\n          borderWidth: 0\n        }\n      },\n      legend: {\n        itemStyle: {\n          font: \'9pt Trebuchet MS, Verdana, sans-serif\',\n          color: \'#a6aed2\'\n        },\n        itemHoverStyle: {\n          color: \'#fff\'\n        }\n      },\n      series: [{\n        color: \'#3453d4\',\n        name: \'&gt;120s\',\n        data: [1, 2, 3, 4, 5, 6, 7]\n      }, {\n        color: \'#ff2674\',\n        name: \'60~120s\',\n        data: [3, 4, 3, 1, 3, 2, 2]\n      }, {\n        color: \'#66c3e3\',\n        // color:\'#66c3e3\',\n        name: \'&lt;60s\',\n        data: [7, 4, 3, 4, 2, 6, 8]\n      }]\n    };\n  }\n};'</span><span class="token punctuation">,</span>
+       _name<span class="token punctuation">:</span>
+        <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/node_modules/babel-loader/lib/index.js!/Users/orion/Desktop/react-beauty-highcharts/src/index.js'</span><span class="token punctuation">,</span>
+       _sourceMap<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+       _originalSource<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+       _innerSourceMap<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    request<span class="token punctuation">:</span>
+     <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/node_modules/babel-loader/lib/index.js!/Users/orion/Desktop/react-beauty-highcharts/src/index.js'</span><span class="token punctuation">,</span>
+    userRequest<span class="token punctuation">:</span> <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/src/index.js'</span><span class="token punctuation">,</span>
+    rawRequest<span class="token punctuation">:</span> <span class="token string">'./src/index.js'</span><span class="token punctuation">,</span>
+    binary<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    parser<span class="token punctuation">:</span><span class="token punctuation">{</span>
+       _pluginCompat<span class="token punctuation">:</span> <span class="token punctuation">[</span>SyncBailHook<span class="token punctuation">]</span><span class="token punctuation">,</span>
+       hooks<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span><span class="token punctuation">,</span>
+       options<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+       sourceType<span class="token punctuation">:</span> <span class="token string">'auto'</span><span class="token punctuation">,</span>
+       scope<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+       state<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+       comments<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    generator<span class="token punctuation">:</span> JavascriptGenerator <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    resource<span class="token punctuation">:</span> <span class="token string">'/Users/orion/Desktop/react-beauty-highcharts/src/index.js'</span><span class="token punctuation">,</span>
+    matchResource<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span>
+    loaders<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    error<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    _buildHash<span class="token punctuation">:</span> <span class="token string">'488efbd43aa05371d3f44d94c89abd57'</span><span class="token punctuation">,</span>
+    buildTimestamp<span class="token punctuation">:</span> <span class="token number">1547885885262</span><span class="token punctuation">,</span>
+    _cachedSources<span class="token punctuation">:</span> Map <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    lineToLine<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    _lastSuccessfulBuildMeta<span class="token punctuation">:</span> <span class="token punctuation">{</span> providedExports<span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    _ast<span class="token punctuation">:</span> <span class="token keyword">null</span> <span class="token punctuation">}</span> <span class="token punctuation">]</span>
+</code></pre></div><p>我们看到module的长度也是一个，一样有类型，路径，hash
+其中
+_source的_value下的module.exports，已经是略微压缩版的了，里面还有\n</p> <p>里面值得分析的还有很多，关于怎么压缩，压缩算法是怎么处理的，二次读源码再详解</p> <p>周六快乐，刚刚抓娃娃机一个都没抓上，哈哈哈哈，但是我抓的激动开心啊😄</p></div> <div class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">1/21/2019, 12:26:28 PM</span></div></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/blog/webpack/webpack8.html" class="prev">
+          浅析webpack源码之Compiler.js模块(八)
+        </a></span> <span class="next"><a href="/blog/webpack/webpack10.html">
+          浅析webpack源码之Stat.js粗解(十)
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/blog/assets/js/36.608991b7.js" defer></script><script src="/blog/assets/js/app.b8f6f876.js" defer></script>
+  </body>
+</html>

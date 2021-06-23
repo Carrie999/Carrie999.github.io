@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>提供数据自动化导入的接口描述, 所有提交以json方式组织数据格式 | 个人主页</title>
+    <meta name="description" content="一个互联网全才妹子，会设计，会前端，会后端，还会视频动效，好像并没有什么卵用。。。。。。。">
+    
+    
+    <link rel="preload" href="/blog/assets/css/styles.b8f6f876.css" as="style"><link rel="preload" href="/blog/assets/js/app.b8f6f876.js" as="script"><link rel="preload" href="/blog/assets/js/18.cbfbf9aa.js" as="script"><link rel="prefetch" href="/blog/assets/css/1.styles.8e8fe409.css"><link rel="prefetch" href="/blog/assets/css/2.styles.a2bd3099.css"><link rel="prefetch" href="/blog/assets/js/1.8e8fe409.js"><link rel="prefetch" href="/blog/assets/js/10.619c7997.js"><link rel="prefetch" href="/blog/assets/js/11.9c3e970b.js"><link rel="prefetch" href="/blog/assets/js/12.531cd467.js"><link rel="prefetch" href="/blog/assets/js/13.7e326423.js"><link rel="prefetch" href="/blog/assets/js/14.f3b097e0.js"><link rel="prefetch" href="/blog/assets/js/15.6a2e75f0.js"><link rel="prefetch" href="/blog/assets/js/16.c206d890.js"><link rel="prefetch" href="/blog/assets/js/17.cff55b68.js"><link rel="prefetch" href="/blog/assets/js/19.96969ef1.js"><link rel="prefetch" href="/blog/assets/js/2.a2bd3099.js"><link rel="prefetch" href="/blog/assets/js/20.357307bb.js"><link rel="prefetch" href="/blog/assets/js/21.69c3455f.js"><link rel="prefetch" href="/blog/assets/js/22.4efd32d6.js"><link rel="prefetch" href="/blog/assets/js/23.f297491c.js"><link rel="prefetch" href="/blog/assets/js/24.cc9b4c20.js"><link rel="prefetch" href="/blog/assets/js/25.ee8d1b0e.js"><link rel="prefetch" href="/blog/assets/js/26.762d7fbf.js"><link rel="prefetch" href="/blog/assets/js/27.3a122b7f.js"><link rel="prefetch" href="/blog/assets/js/28.2175adc1.js"><link rel="prefetch" href="/blog/assets/js/29.ebb9d56c.js"><link rel="prefetch" href="/blog/assets/js/3.7e0f7a9a.js"><link rel="prefetch" href="/blog/assets/js/30.73a02a6b.js"><link rel="prefetch" href="/blog/assets/js/31.1eae61bd.js"><link rel="prefetch" href="/blog/assets/js/32.c07b58b2.js"><link rel="prefetch" href="/blog/assets/js/33.397eaa54.js"><link rel="prefetch" href="/blog/assets/js/34.51ce988a.js"><link rel="prefetch" href="/blog/assets/js/35.58456503.js"><link rel="prefetch" href="/blog/assets/js/36.608991b7.js"><link rel="prefetch" href="/blog/assets/js/4.66ec0ecb.js"><link rel="prefetch" href="/blog/assets/js/5.38cc5d58.js"><link rel="prefetch" href="/blog/assets/js/6.ce65520e.js"><link rel="prefetch" href="/blog/assets/js/7.705c84c4.js"><link rel="prefetch" href="/blog/assets/js/8.95f0bebe.js"><link rel="prefetch" href="/blog/assets/js/9.291ac53a.js">
+    <link rel="stylesheet" href="/blog/assets/css/1.styles.8e8fe409.css"><link rel="stylesheet" href="/blog/assets/css/2.styles.a2bd3099.css"><link rel="stylesheet" href="/blog/assets/css/styles.b8f6f876.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/blog/" class="home-link router-link-active"><!----> <span class="site-name">个人主页</span></a> <div class="links" style="max-width:nullpx;"><!----> <nav class="nav-links can-hide"><div class="nav-item"><a href="/blog/" class="nav-link">主页</a></div><div class="nav-item"><a href="/blog/home/" class="nav-link">vue源码解读</a></div><div class="nav-item"><a href="/blog/webpack/" class="nav-link">webpack源码解读</a></div><div class="nav-item"><a href="/blog/node/" class="nav-link">koa源码解析</a></div><div class="nav-item"><a href="/blog/base/" class="nav-link">JS基础</a></div><div class="nav-item"><a href="/blog/source/" class="nav-link">其他</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">博文</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog/interview/" class="nav-link router-link-active">面试题</a></li><li class="dropdown-item"><!----> <a href="/blog/essay/" class="nav-link">随想</a></li><li class="dropdown-item"><!----> <a href="https://saintgirl.zcool.com.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  设计
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div><div class="nav-item"><a href="https://github.com/Carrie999" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/blog/" class="nav-link">主页</a></div><div class="nav-item"><a href="/blog/home/" class="nav-link">vue源码解读</a></div><div class="nav-item"><a href="/blog/webpack/" class="nav-link">webpack源码解读</a></div><div class="nav-item"><a href="/blog/node/" class="nav-link">koa源码解析</a></div><div class="nav-item"><a href="/blog/base/" class="nav-link">JS基础</a></div><div class="nav-item"><a href="/blog/source/" class="nav-link">其他</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">博文</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog/interview/" class="nav-link router-link-active">面试题</a></li><li class="dropdown-item"><!----> <a href="/blog/essay/" class="nav-link">随想</a></li><li class="dropdown-item"><!----> <a href="https://saintgirl.zcool.com.cn" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  设计
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div><div class="nav-item"><a href="https://github.com/Carrie999" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><div class="sidebar-group first"><p class="sidebar-heading open"><span>面试题</span> <!----></p> <ul class="sidebar-group-items"><li><a href="/blog/interview/" class="sidebar-link">前端面试范围</a></li><li><a href="/blog/interview/two.html" class="sidebar-link">今日头条和美团面试题面经分享</a></li><li><a href="/blog/interview/three.html" class="sidebar-link">阿里巴巴前端工程师一面二面三面终面面经总结</a></li></ul></div></li></ul> </div> <div class="page"> <div class="content"><h3 id="提供数据自动化导入的接口描述-所有提交以json方式组织数据格式"><a href="#提供数据自动化导入的接口描述-所有提交以json方式组织数据格式" aria-hidden="true" class="header-anchor">#</a> 提供数据自动化导入的接口描述, 所有提交以json方式组织数据格式</h3> <ul><li>功能：获取预设数据的来源、分类、子分类信息。</li> <li>请求方式：GET</li> <li>请求URL：/api/v1/data/import</li> <li>请求参数：无</li> <li>响应结果：</li></ul> <div class="language-python extra-class"><pre class="language-python"><code><span class="token punctuation">{</span>
+    <span class="token string">&quot;data&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token comment"># 抽帧信息的下拉框选项值</span>
+        <span class="token comment"># 为方便后续动态扩充，该值由后端提供，如果前端硬编码设置填写，参考/api/v1/data/import POST 接口说明</span>
+        <span class="token string">&quot;extract_info&quot;</span><span class="token punctuation">:</span>
+        <span class="token punctuation">[</span>
+            <span class="token comment"># [&quot;选中后的真实值，该值要回传&quot;, &quot;页面显示值，用于用户识别&quot;]， 比如[&quot;fix-time-interval&quot;， &quot;固定抽帧间隔(1张/x帧)&quot;]</span>
+            <span class="token punctuation">[</span>$realValue<span class="token punctuation">,</span> $showValue<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+        <span class="token comment"># 人脸检测模型下拉菜单选项，如果前端硬编码设置填写，参考/api/v1/data/import POST 接口说明</span>
+        <span class="token string">&quot;facedetect&quot;</span><span class="token punctuation">:</span>
+        <span class="token punctuation">[</span>
+            <span class="token comment"># [&quot;选中后的真实值，该值要回传&quot;, &quot;页面显示值，用于用户识别&quot;]， 比如[&quot;algorithm-ssd&quot;， &quot;SSD&quot;]</span>
+            <span class="token punctuation">[</span>$realValue<span class="token punctuation">,</span> $showValue<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="src-stat-query"><a href="#src-stat-query" aria-hidden="true" class="header-anchor">#</a> /src_stat/query</h3> <ul><li>Method: GET</li> <li>用于“数据来源”下拉菜单联动。</li></ul> <p>查询<code>source</code>、<code>subsource</code>统计信息的接口。</p> <p>Demo: <code>/api/v1/src_stat/query?source=fudu</code></p> <p>可用参数：</p> <ul><li>source: 根据source查询；</li> <li>subsource: 根据subsource查询；</li></ul> <p>返回结果：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+  <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;source&quot;</span><span class="token operator">:</span> <span class="token string">&quot;luyi&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;count&quot;</span><span class="token operator">:</span> <span class="token number">8916</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;source&quot;</span><span class="token operator">:</span> <span class="token string">&quot;self_collecting&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;subsource&quot;</span><span class="token operator">:</span> <span class="token string">&quot;baoxiaomi&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;count&quot;</span><span class="token operator">:</span> <span class="token number">866</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;exec_time&quot;</span><span class="token operator">:</span> <span class="token string">&quot;0.012s&quot;</span><span class="token punctuation">,</span>        // 查询耗时
+  <span class="token property">&quot;total_num&quot;</span><span class="token operator">:</span> <span class="token number">2</span>                // 查询得到的数量
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="cat-stat-query"><a href="#cat-stat-query" aria-hidden="true" class="header-anchor">#</a> /cat_stat/query</h3> <ul><li>Method: GET</li> <li>用于“数据分类”下拉菜单联动。</li></ul> <p>查询<code>category</code>、<code>subcategory</code>、<code>input_tag</code>统计信息的接口。</p> <p>Demo: <code>/api/v1/cat_stat/query</code></p> <p>可用参数：</p> <ul><li>category: 根据category查询；</li> <li>subcategory: 根据subcategory查询；</li> <li>input_tag: 根据input_tag查询；</li></ul> <p>返回结果：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+  <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;category&quot;</span><span class="token operator">:</span> <span class="token string">&quot;object&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;subcategory&quot;</span><span class="token operator">:</span> <span class="token string">&quot;coffee_LED&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;count&quot;</span><span class="token operator">:</span> <span class="token number">2075</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;category&quot;</span><span class="token operator">:</span> <span class="token string">&quot;object&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;subcategory&quot;</span><span class="token operator">:</span> <span class="token string">&quot;fruit&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;input_tag&quot;</span><span class="token operator">:</span> <span class="token string">&quot;apple_negative_sample&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;count&quot;</span><span class="token operator">:</span> <span class="token number">1581</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;exec_time&quot;</span><span class="token operator">:</span> <span class="token string">&quot;0.012s&quot;</span><span class="token punctuation">,</span>        // 查询耗时
+  <span class="token property">&quot;total_num&quot;</span><span class="token operator">:</span> <span class="token number">2</span>                // 查询得到的数量
+<span class="token punctuation">}</span>
+</code></pre></div><hr> <ul><li>功能：提交异步导入任务, 后端以填入的path为唯一条件判断是否已经导入，如果已经导入则返回非正确码(10000为正确响应码)</li> <li>请求方式：POST</li> <li>请求URL：/api/v1/data/import</li> <li>请求参数：json</li></ul> <div class="language-python extra-class"><pre class="language-python"><code><span class="token punctuation">{</span>
+    <span class="token string">&quot;title&quot;</span><span class="token punctuation">:</span> $title<span class="token punctuation">,</span>  <span class="token comment"># 任务的名称</span>
+    <span class="token string">&quot;account&quot;</span><span class="token punctuation">:</span> $account<span class="token punctuation">,</span> <span class="token comment"># nfs数据拉取的账号名称,</span>
+    <span class="token string">&quot;data_path&quot;</span><span class="token punctuation">:</span> $data_path<span class="token punctuation">,</span>  <span class="token comment"># 数据拉取的相对的路径</span>
+    <span class="token string">&quot;source&quot;</span><span class="token punctuation">:</span> $source<span class="token punctuation">,</span> <span class="token comment"># 该批次导入的数据来源</span>
+    <span class="token string">&quot;subsource&quot;</span><span class="token punctuation">:</span> $subsource<span class="token punctuation">,</span> <span class="token comment"># 该批次导入的数据来源</span>
+    <span class="token string">&quot;category&quot;</span><span class="token punctuation">:</span> $category<span class="token punctuation">,</span> <span class="token comment"># 该批次导入的数据分类</span>
+    <span class="token string">&quot;subcategory&quot;</span><span class="token punctuation">:</span> $subcategory<span class="token punctuation">,</span> <span class="token comment"># 该批次导入的数据子分类</span>
+    <span class="token string">&quot;input_tag&quot;</span><span class="token punctuation">:</span> $input_tag<span class="token punctuation">,</span> <span class="token comment"># 该批次导入的数据标签</span>
+    <span class="token string">&quot;desc&quot;</span><span class="token punctuation">:</span> $desc<span class="token punctuation">,</span>  <span class="token comment"># 该次导入的描述</span>
+    <span class="token string">&quot;mail_to&quot;</span><span class="token punctuation">:</span> $send_to<span class="token punctuation">,</span>  <span class="token comment"># list， 任务成功后，将状态信息发送给谁</span>
+    <span class="token string">&quot;cc_to&quot;</span><span class="token punctuation">:</span>  $sned_to<span class="token punctuation">,</span>  <span class="token comment"># list, 任务成功后，抄送状态信息给谁， 可选</span>
+
+    <span class="token comment"># 抽帧信息, 如果未选择，该字典值为空字典{}</span>
+    <span class="token string">&quot;extract&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token string">&quot;method&quot;</span><span class="token punctuation">:</span> $method<span class="token punctuation">,</span> <span class="token comment"># str,固定帧数 对应值为 'fix-frame-interval', 固定抽几张 对应值为 'fix-picture-number', 固定抽帧间隔 对应值为 'fix-time-interval'</span>
+        <span class="token string">&quot;value&quot;</span><span class="token punctuation">:</span> $value<span class="token punctuation">,</span> <span class="token comment"># int，大于0整数，毫秒</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+    <span class="token comment"># 人脸检测过滤，如果未选择，该字典值为空字典{}</span>
+    <span class="token string">&quot;filter&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token string">&quot;algorithm&quot;</span><span class="token punctuation">:</span> $algorithm<span class="token punctuation">,</span>  <span class="token comment"># str，抽帧算法，SSD算法对应值为&quot;algorithm-ssd&quot;，</span>
+        <span class="token string">&quot;confidence&quot;</span><span class="token punctuation">:</span> $confidenc<span class="token punctuation">,</span> <span class="token comment"># float，小于1大于0，检测出置信度小于该值，则不入库直接丢弃, 未选择该项过滤置为 0</span>
+        <span class="token string">&quot;size&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>$width<span class="token punctuation">,</span> $heigth<span class="token punctuation">]</span> <span class="token comment"># list，检测到人脸的宽度或者高度小于对应值，则丢弃, 未选择该项过滤置为 []</span>
+        <span class="token string">&quot;crop_face&quot;</span> <span class="token punctuation">:</span> $crop_face<span class="token punctuation">,</span> <span class="token comment"># bool, 是否同时导入人脸抠图数据, 默认值false</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><ul><li>响应结果：</li></ul> <div class="language- extra-class"><pre class="language-text"><code>{
+    &quot;message&quot;: $message,  //用户提示信息
+}
+</code></pre></div><h3 id="数据导入任务列表"><a href="#数据导入任务列表" aria-hidden="true" class="header-anchor">#</a> 数据导入任务列表</h3> <ul><li>功能：获取导入任务的列表</li> <li>请求方式：GET</li> <li>请求URL：/api/v1/data/import/tasks</li> <li>请求参数：无</li> <li>响应结果：</li> <li></li></ul> <div class="language- extra-class"><pre class="language-text"><code>    {
+        data: [
+                {
+                    &quot;title&quot;: $title,  // str, 导入任务的标题
+                    &quot;source&quot;: $source, //str, 数据来源
+                    &quot;subsource&quot;: $subsource, //str, 数据来源
+                    &quot;category&quot;: $category, //str,数据分类
+                    &quot;subcategory&quot;: $subcategory, //str, 数据子分类
+                    &quot;inputtag&quot;: $inputtag, //str,
+                    &quot;process&quot;: $process, // int, 任务进度占比， 0&lt;= process &lt;= 100
+                }
+            }
+        ],
+        &quot;message&quot;: $message,
+    }
+</code></pre></div><h3 id="导出zip包功能"><a href="#导出zip包功能" aria-hidden="true" class="header-anchor">#</a> 导出ZIP包功能</h3> <ul><li>功能：数据平台接口，用于将指定数据平台的数据，以zip包形式导出，并存放于指定的地方,该数据一般是标注好的数据，用于训练使用</li> <li>请求方式：POST</li> <li>请求URL：/api/v1/export/to-zip</li> <li>请求参数：</li></ul> <table><thead><tr><th>参数</th> <th>类型</th> <th>描述</th></tr></thead> <tbody><tr><td>path</td> <td>String</td> <td>zip 包导出的路径</td></tr> <tr><td>number</td> <td>int</td> <td>导入数据的条数，建议做个限制，不要一次超过2w条</td></tr> <tr><td>queryUrl</td> <td>String</td> <td>从页面查询出数据的查询url</td></tr> <tr><td>fileName</td> <td>String</td> <td>导出zip的名称</td></tr></tbody></table> <ul><li>响应结果：</li></ul> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;message&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>  // 操作结果的状态，该状态仅用于调试
+    <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> $code<span class="token punctuation">,</span>  // 接口操作状态， <span class="token number">10000</span>代表成功，其他数字代表失败，且含义具体待定。
+    <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        // 该方案，仅临时用作查看任务状态，后续可能提供更好的方案
+        <span class="token property">&quot;statusQueryUrl&quot;</span><span class="token operator">:</span> $statusQueryUrl<span class="token punctuation">,</span> // 该次状态查询的url<span class="token punctuation">,</span>可通过该地址查看任务的执行状态
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="导出hdf5功能"><a href="#导出hdf5功能" aria-hidden="true" class="header-anchor">#</a> 导出HDF5功能</h3> <ul><li>功能：数据平台接口，用于将指定数据平台的数据，以HDF5文件格式导出，并存放于指定的地方, 该数据一般是标注好的数据，用于训练使用</li> <li>请求方式：POST</li> <li>请求URL：/api/v1/export/to-hdf5</li> <li>请求参数：</li></ul> <table><thead><tr><th>参数</th> <th>类型</th> <th>描述</th></tr></thead> <tbody><tr><td>taskId</td> <td>Integer</td> <td>标注任务的id值</td></tr> <tr><td>queryUrls</td> <td>List</td> <td>查询出数据的查询url列表</td></tr> <tr><td>path</td> <td>String</td> <td>HDF5 包导出的路径</td></tr> <tr><td>labels</td> <td>List</td> <td>标签类型列表</td></tr> <tr><td>number</td> <td>int</td> <td>导入数据的条数(大于0）</td></tr> <tr><td>testRatio</td> <td>浮点数</td> <td>测试数据占比(大于0小于1）</td></tr></tbody></table> <ul><li>响应结果：</li></ul> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;message&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>  // 操作结果的状态，该状态仅用于调试
+    <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> $code<span class="token punctuation">,</span>  // 接口操作状态， <span class="token number">10000</span>代表成功，其他数字代表失败，且含义具体待定。
+    <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        // 该方案，仅临时用作查看任务状态，后续可能提供更好的方案
+        <span class="token property">&quot;statusQueryUrl&quot;</span><span class="token operator">:</span> $statusQueryUrl<span class="token punctuation">,</span> // 该次状态查询的url<span class="token punctuation">,</span>可通过该地址查看任务的执行状态
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="域账户登录接口"><a href="#域账户登录接口" aria-hidden="true" class="header-anchor">#</a> 域账户登录接口</h2> <h3 id="_1、登录"><a href="#_1、登录" aria-hidden="true" class="header-anchor">#</a> 1、登录</h3> <ul><li>请求方式：POST</li> <li>请求URL：/api/v1/user/auth</li> <li>请求参数：json<div class="language- extra-class"><pre class="language-text"><code>{
+  &quot;username&quot;: $username,  # str，域账户用户名(邮箱前缀)
+  &quot;password&quot;: $password  # str，域账户密码（域登录密码）
+}
+</code></pre></div></li> <li>Json返回值：<div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+  <span class="token property">&quot;message&quot;</span><span class="token operator">:</span> $message<span class="token punctuation">,</span>  # str<span class="token punctuation">,</span> 调试message
+  <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> $code<span class="token punctuation">,</span>  # 标准的http code，用于代表数据校验异常，数据校验失败时，header中的http code仍然是<span class="token number">200</span>
+  <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">&quot;username&quot;</span><span class="token operator">:</span> $username<span class="token punctuation">,</span> # str，当前登录的用户名
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li></ul> <h3 id="_2、退出"><a href="#_2、退出" aria-hidden="true" class="header-anchor">#</a> 2、退出</h3> <ul><li><p>请求方式：DELETE</p></li> <li><p>请求URL：/api/v1/user/auth</p></li> <li><p>请求参数：无</p> <div class="language- extra-class"><pre class="language-text"><code>    携带登录时header中的X-CSRFToken字段，以及cookie中的csrftoken和sessionid
+</code></pre></div></li> <li><p>返回值：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;message&quot;</span><span class="token operator">:</span> $message<span class="token punctuation">,</span>  # str<span class="token punctuation">,</span> 调试message
+    <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> $code<span class="token punctuation">,</span>  # 标准的http code，用于代表数据校验异常，数据校验失败时，header中的http code仍然是<span class="token number">200</span>
+    <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;username&quot;</span><span class="token operator">:</span> $username<span class="token punctuation">,</span> # str，当前登录的用户名
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li></ul> <h2 id="标注任务接口"><a href="#标注任务接口" aria-hidden="true" class="header-anchor">#</a> 标注任务接口</h2> <h3 id="_1、获取标注任务"><a href="#_1、获取标注任务" aria-hidden="true" class="header-anchor">#</a> 1、获取标注任务</h3> <blockquote><p>后端每次返回固定数量的标注任务任务，后端将按任务创建的时间进行逆序返回，暂时由前端进行分页</p></blockquote> <ul><li>请求方式：GET</li> <li>请求URL：/api/v1/label/task</li> <li>请求参数：无</li> <li>返回值：<div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;message&quot;</span><span class="token operator">:</span> $message<span class="token punctuation">,</span>  # str<span class="token punctuation">,</span> 调试message
+    <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> $code<span class="token punctuation">,</span>  # 标准的http code，用于代表数据校验异常，数据校验失败时，header中的http code仍然是<span class="token number">200</span>
+    <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">&quot;task&quot;</span><span class="token operator">:</span> <span class="token string">&quot;taskId&quot;</span><span class="token punctuation">,</span>  # int<span class="token punctuation">,</span> 任务id
+            <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;taskName&quot;</span><span class="token punctuation">,</span>  # str<span class="token punctuation">,</span> 任务名称
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;taskType&quot;</span><span class="token punctuation">,</span> # int<span class="token punctuation">,</span> 任务类型
+            <span class="token property">&quot;source&quot;</span><span class="token operator">:</span> <span class="token string">&quot;source&quot;</span><span class="token punctuation">,</span> # str<span class="token punctuation">,</span> 数据来源
+            <span class="token property">&quot;status&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ok&quot;</span><span class="token punctuation">,</span>  # str<span class="token punctuation">,</span> 数据状态
+            <span class="token property">&quot;tag&quot;</span><span class="token operator">:</span> <span class="token string">&quot;tag&quot;</span><span class="token punctuation">,</span> # str<span class="token punctuation">,</span> 数据tag
+            <span class="token property">&quot;mark_type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;mark_type&quot;</span><span class="token punctuation">,</span> # list<span class="token punctuation">,</span> 标注类型
+            <span class="token property">&quot;export_num&quot;</span><span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span> # int<span class="token punctuation">,</span> 数据平台导出总计数
+            <span class="token property">&quot;pull_num&quot;</span><span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span> # int <span class="token punctuation">,</span>  # 即页面上的从标注平台回传的数量
+            <span class="token property">&quot;total_num&quot;</span><span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span> # int<span class="token punctuation">,</span> 标注平台接收到的数量
+            <span class="token property">&quot;abandoned_num&quot;</span><span class="token operator">:</span><span class="token number">10</span><span class="token punctuation">,</span> # int<span class="token punctuation">,</span> 标注平台标记的invalid的数量
+            <span class="token property">&quot;labeled_num&quot;</span><span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span> # int<span class="token punctuation">,</span> 标注平台标记的invalid的数量
+            <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;description&quot;</span><span class="token punctuation">,</span> # str<span class="token punctuation">,</span> 描述信息
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li></ul> <h3 id="_2、更新标注任务"><a href="#_2、更新标注任务" aria-hidden="true" class="header-anchor">#</a> 2、更新标注任务</h3> <blockquote><p>以json方式提交数据，仅允许更新tag、description、status字段，status仅允许修改值为&quot;test&quot;、&quot;drop&quot;, 其他值非法。</p></blockquote> <ul><li>请求方式：PUT</li> <li>请求URL：/api/v1/label/task</li> <li>请求参数：<div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;task&quot;</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>          // int<span class="token punctuation">,</span> 任务id
+    <span class="token property">&quot;tag&quot;</span><span class="token operator">:</span> <span class="token string">&quot;tag&quot;</span><span class="token punctuation">,</span>       // str 数据tag
+    <span class="token property">&quot;status&quot;</span><span class="token operator">:</span> <span class="token string">&quot;test&quot;</span>/<span class="token string">&quot;drop&quot;</span><span class="token punctuation">,</span>   // str 数据状态
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx...&quot;</span><span class="token punctuation">,</span>   // str<span class="token punctuation">,</span>描述信息
+<span class="token punctuation">}</span>
+</code></pre></div></li> <li>返回数据：<div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;message&quot;</span><span class="token operator">:</span> $message<span class="token punctuation">,</span>    // str<span class="token punctuation">,</span> 调试message
+    <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> $code<span class="token punctuation">,</span>          // 标准的http code，用于代表数据校验异常，数据校验失败时，header中的http code仍然是<span class="token number">200</span>
+    <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li></ul> <h2 id="dashboard接口-默认以万为计数单位，比如返回100，-代表100万"><a href="#dashboard接口-默认以万为计数单位，比如返回100，-代表100万" aria-hidden="true" class="header-anchor">#</a> Dashboard接口, 默认以万为计数单位，比如返回100， 代表100万</h2> <h3 id="_1、标注数据统计接口"><a href="#_1、标注数据统计接口" aria-hidden="true" class="header-anchor">#</a> 1、标注数据统计接口</h3> <ul><li>请求方式：GET</li> <li>请求地址：/api/v1/dashboard/data/total</li> <li>请求参数：无</li> <li>返回数据: 返回数据总量、已标注数据量、未标注数据量<div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;message&quot;</span><span class="token operator">:</span> $message<span class="token punctuation">,</span>    // str<span class="token punctuation">,</span> 调试message
+    <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> $code<span class="token punctuation">,</span>          // 标准的http code，用于代表数据校验异常，数据校验失败时，header中的http code仍然是<span class="token number">200</span>
+    <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;total&quot;</span><span class="token operator">:</span> $total<span class="token punctuation">,</span>  //float 图片数据总量
+        <span class="token property">&quot;labeled&quot;</span><span class="token operator">:</span> $labeled<span class="token punctuation">,</span> //float 已标注数据总量
+        <span class="token property">&quot;unlabeled&quot;</span><span class="token operator">:</span> $unlabeled<span class="token punctuation">,</span> //float未标注图片总量
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li></ul> <h3 id="_2、图片数据总量趋势数据-默认以当前时间往回推算"><a href="#_2、图片数据总量趋势数据-默认以当前时间往回推算" aria-hidden="true" class="header-anchor">#</a> 2、图片数据总量趋势数据,默认以当前时间往回推算</h3> <ul><li>请求方式：GET</li> <li>请求地址：/api/v1/dashboard/data/trend?range=$range</li> <li>请求参数：range<div class="language-json extra-class"><pre class="language-json"><code>GET 参数range，取值范围(week<span class="token punctuation">,</span> month<span class="token punctuation">)</span><span class="token punctuation">,</span> 没有参数时，默认返回以week为时间段的数据
+</code></pre></div></li> <li>返回数据: 返回数据总量趋势， range字段与count字段对应的数组长度一致,且一一对应<div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;message&quot;</span><span class="token operator">:</span> $message<span class="token punctuation">,</span>    // str<span class="token punctuation">,</span> 调试message
+    <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> $code<span class="token punctuation">,</span>          // 标准的http code，用于代表数据校验异常，数据校验失败时，header中的http code仍然是<span class="token number">200</span>
+    <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> 
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;range&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+           $range<span class="token punctuation">,</span> //str<span class="token punctuation">,</span> 每个数据点对应的时间节点，前端可用于显示横坐标值
+        <span class="token punctuation">]</span><span class="token punctuation">,</span> 
+        <span class="token property">&quot;count&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+           $count<span class="token punctuation">,</span> //float<span class="token punctuation">,</span> 每个时间节点对应的数据量的统计值，
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li></ul> <h3 id="_3、各个数据类型的数据汇总"><a href="#_3、各个数据类型的数据汇总" aria-hidden="true" class="header-anchor">#</a> 3、各个数据类型的数据汇总</h3> <ul><li>请求方式：GET</li> <li>请求地址：/api/v1/dashboard/data/category</li> <li>请求参数：无</li> <li>返回数据：category字段，count字段长度一致,且一一对应<div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;message&quot;</span><span class="token operator">:</span> $message<span class="token punctuation">,</span>    // str<span class="token punctuation">,</span> 调试message
+    <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> $code<span class="token punctuation">,</span>          // 标准的http code，用于代表数据校验异常，数据校验失败时，header中的http code仍然是<span class="token number">200</span>
+    <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> 
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;category&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            $category<span class="token punctuation">,</span>  //str，图片的分类，如face、body、object等
+        <span class="token punctuation">]</span>
+        <span class="token property">&quot;count&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            $count<span class="token punctuation">,</span> //float<span class="token punctuation">,</span> 各个数据分类的统计值
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li></ul> <h3 id="_4、某个数据类型下各个属性所含图片量的汇总"><a href="#_4、某个数据类型下各个属性所含图片量的汇总" aria-hidden="true" class="header-anchor">#</a> 4、某个数据类型下各个属性所含图片量的汇总</h3> <ul><li>请求方式：GET</li> <li>请求地址：/api/v1/dashboard/data/subcategory?category=$category</li> <li>请求参数：category, 可选<div class="language-json extra-class"><pre class="language-json"><code>    category<span class="token punctuation">,</span> 可选<span class="token punctuation">,</span> 字段取值范围由后端返回，参考接口/api/v1/dashboard/data/category 
+</code></pre></div></li> <li>返回数据：subcategory字段，count字段长度一致,且一一对应<div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;message&quot;</span><span class="token operator">:</span> $message<span class="token punctuation">,</span>    // str<span class="token punctuation">,</span> 调试message
+    <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> $code<span class="token punctuation">,</span>          // 标准的http code，用于代表数据校验异常，数据校验失败时，header中的http code仍然是<span class="token number">200</span>
+    <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> 
+    <span class="token punctuation">{</span>
+        <span class="token property">&quot;current_category&quot;</span><span class="token operator">:</span> $scategory<span class="token punctuation">,</span> // 当前接口返回的标注数据分类
+        <span class="token property">&quot;category&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>  // 数据分类列表
+            $category<span class="token punctuation">,</span>  //str，数据分类，如face、body、object等
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>      
+        <span class="token property">&quot;subcategory&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span> // 数据子分类子分类列表
+            $subcategory<span class="token punctuation">,</span>  //str，数据子分类，如facedet、emotion、face_attr等
+        <span class="token punctuation">]</span>
+        <span class="token property">&quot;count&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            $count<span class="token punctuation">,</span> //float<span class="token punctuation">,</span> 各个数据类型的统计值
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li></ul></div> <div class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">11/14/2018, 4:49:10 PM</span></div></div> <!----> </div> <!----></div></div>
+    <script src="/blog/assets/js/18.cbfbf9aa.js" defer></script><script src="/blog/assets/js/app.b8f6f876.js" defer></script>
+  </body>
+</html>

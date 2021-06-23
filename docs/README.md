@@ -10,7 +10,7 @@
 
 | 博客       | 设计          | 联系我 |
 | ------------- |:-------------:| -----:|
-| [segmentfault](https://segmentfault.com/u/bianyuan_599ce4e044423)     | [站酷](https://saintgirl.zcool.com.cn/) | 邮箱:771685809@qq.com |
+| [segmentfault](https://segmentfault.com/blog/carrie)     | [站酷](https://saintgirl.zcool.com.cn/) | 邮箱:771685809@qq.com |
 | [掘金](https://juejin.im/user/5aa38388f265da239b410a48)     | [lofter](http://saintgirl.lofter.com/)     |   微信:yajingpang |
 
 ``` js{2}
